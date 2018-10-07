@@ -23,7 +23,7 @@ Via Terminal _(maximize the window for the best effect)_:
 ```
 mkdir ~/Downloads/freshinstall
 cd ~/Downloads/freshinstall
-curl -#L https://github.com/bramus/freshinstall/tarball/master | tar -xzv --strip-components 1 --exclude={LICENSE}
+curl -#L https://github.com/jorgemudry/macsetup/tarball/master | tar -xzv --strip-components 1 --exclude={LICENSE}
 ```
 
 ## Usage
@@ -42,11 +42,7 @@ With successive runs, `./freshinstall` will pick up where it left. If you do wan
 
 	This step will set some (opinionated) macOS defaults.
 
-2. SSH Configuration
-
-	This step will check your SSH Configuration, and create an SSH key if none has been created yet.
-
-3. Essentials
+2. Essentials
 
 	This step will install some required essentials. These include:
 
@@ -56,17 +52,7 @@ With successive runs, `./freshinstall` will pick up where it left. If you do wan
 
 	The git installation will also do some basic configuration ;)
 
-4. Dotfiles
-
-	This step will copy over the defined dotfiles. Included things are:
-
-	- A customized prompt
-	- Git branch autocompletion
-	- Makefile autocompletion
-
-	_Note that these files (`.bash_profile` and such) will be altered in later steps, upon installing specific pieces of software_
-
-5. Software
+3. Software
 
 	Handpicked selection of Software + Config in some cases
 

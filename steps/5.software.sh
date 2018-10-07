@@ -29,8 +29,7 @@ fi;
 # Install GNU `sed`, overwriting the built-in `sed`.
 #brew install gnu-sed --with-default-names
 
-# Install `wget` with IRI support.
-brew install wget --with-iri
+brew install wget
 
 ###############################################################################
 # Bash.                                                                       #
@@ -70,18 +69,19 @@ fi;
 # - To get identifier of Sublime: /usr/libexec/PlistBuddy -c 'Print CFBundleIdentifier' /Applications/Sublime\ Text.app/Contents/Info.plist
 # - To get UTI of a file: mdls -name kMDItemContentTypeTree /path/to/file.ext
 #
-brew install duti
-duti -s com.sublimetext.3 public.data all # for files like ~/.bash_profile
-duti -s com.sublimetext.3 public.plain-text all
-duti -s com.sublimetext.3 public.script all
-duti -s com.sublimetext.3 net.daringfireball.markdown all
+# Disabled until they make it compatible with mojave
+# brew install duti
+# duti -s com.sublimetext.3 public.data all # for files like ~/.bash_profile
+# duti -s com.sublimetext.3 public.plain-text all
+# duti -s com.sublimetext.3 public.script all
+# duti -s com.sublimetext.3 net.daringfireball.markdown all
 
 
 ###############################################################################
 # vim                                                                         #
 ###############################################################################
 
-brew install vim --override-system-vi
+brew install vim --with-override-system-vi
 
 ###############################################################################
 # CTF tools                                                                   #
@@ -126,39 +126,39 @@ brew install vim --override-system-vi
 ###############################################################################
 # Mac App Store                                                               #
 ###############################################################################
+# Still not compatible with Mojave
+# brew install mas
 
-brew install mas
+# # Apple ID
+# if [ -n "$(defaults read NSGlobalDomain AppleID 2>&1 | grep -E "( does not exist)$")" ]; then
+# 	AppleID=""
+# else
+# 	AppleID="$(defaults read NSGlobalDomain AppleID)"
+# fi;
+# echo -e "\nWhat's your Apple ID? (default: $AppleID)"
+# echo -ne "> \033[34m\a"
+# read
+# echo -e "\033[0m\033[1A\n"
+# [ -n "$REPLY" ] && AppleID=$REPLY
 
-# Apple ID
-if [ -n "$(defaults read NSGlobalDomain AppleID 2>&1 | grep -E "( does not exist)$")" ]; then
-	AppleID=""
-else
-	AppleID="$(defaults read NSGlobalDomain AppleID)"
-fi;
-echo -e "\nWhat's your Apple ID? (default: $AppleID)"
-echo -ne "> \033[34m\a"
-read
-echo -e "\033[0m\033[1A\n"
-[ -n "$REPLY" ] && AppleID=$REPLY
+# if [ "$AppleID" != "" ]; then
 
-if [ "$AppleID" != "" ]; then
+# 	# Sign in
+# 	mas signin $AppleID
 
-	# Sign in
-	mas signin --dialog $AppleID
+# 	# iWork
+# 	mas install 409203825 # Numbers
+# 	mas install 409201541 # Pages
+# 	mas install 409183694 # Keynote
 
-	# iWork
-	mas install 409203825 # Numbers
-	mas install 409201541 # Pages
-	mas install 409183694 # Keynote
+# 	# Others
+# 	mas install 425424353 # The Unarchiver
+# 	mas install 946399090 # Telegram Desktop
+#     mas install 803453959 # Slack
+# 	mas install 417602904 # CloudApp
+#     mas install 1063631769 # Medis - GUI for Redis
 
-	# Others
-	mas install 425424353 # The Unarchiver
-	mas install 946399090 # Telegram Desktop
-    mas install 803453959 # Slack
-	mas install 417602904 # CloudApp
-    mas install 1063631769 # Medis - GUI for Redis
-
-fi;
+# fi;
 
 
 ###############################################################################
@@ -202,10 +202,10 @@ brew install tldr
 # IMAGE & VIDEO PROCESSING                                                    #
 ###############################################################################
 
-brew install imagemagick --with-librsvg --with-opencl --with-webp
+brew install imagemagick --with-librsvg --with-webp
 
 brew install libvpx
-brew install ffmpeg --with-libass --with-libvorbis --with-libvpx --with-x265 --with-ffplay
+brew install ffmpeg --with-libass --with-libvorbis --with-libvpx --with-x265 --with-sdl2
 brew install youtube-dl
 
 ###############################################################################
@@ -244,8 +244,8 @@ brew install php@7.1
 brew services start php
 brew link php
 
-pecl install mcrypt-1.0.1 # mcrypt for PHP 7.2
-pecl install grpc # needed for google firestore et al
+# pecl install mcrypt-1.0.1 # mcrypt for PHP 7.2
+# pecl install grpc # needed for google firestore et al
 
 # @note: You might wanna "sudo brew services restart php" after this
 
@@ -395,7 +395,7 @@ brew cask install deltawalker
 
 # Media
 brew cask install vlc
-duti -s org.videolan.vlc public.avi all
+# duti -s org.videolan.vlc public.avi all
 brew cask install spotify
 # https://handbrake.fr/
 brew cask install handbrake

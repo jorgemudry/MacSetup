@@ -32,7 +32,7 @@ else
 fi;
 
 if [ "$xcodetools_installed" == "no" ]; then
-    echo -e "\Launching installer for Xcode Command Line Tools …"
+    echo -e "\nLaunching installer for Xcode Command Line Tools …"
 
     xcode-select --install &>/dev/null
 

@@ -239,14 +239,7 @@ echo -e "- SSD-specific tweaks …"
 # Disable hibernation (speeds up entering sleep mode)
 sudo pmset -a hibernatemode 0
 
-# # Remove the sleep image file to save disk space
-sudo rm /private/var/vm/sleepimage
-# # Create a zero-byte file instead…
-sudo touch /private/var/vm/sleepimage
-# # …and make sure it can’t be rewritten
-sudo chflags uchg /private/var/vm/sleepimage
-
-# # Disable the sudden motion sensor as it’s not useful for SSDs
+# Disable the sudden motion sensor as it’s not useful for SSDs
 sudo pmset -a sms 0
 
 ###############################################################################
@@ -360,9 +353,9 @@ echo -e "- Screen and Screensaver …"
 defaults write com.apple.screensaver askForPassword -int 1
 defaults write com.apple.screensaver askForPasswordDelay -int 0
 
-# Set screensaver to flurry, start after 5 minutes
+# Set screensaver to flurry, start after 20 minutes
 defaults -currentHost write com.apple.screensaver moduleDict -dict path -string "/System/Library/Screen Savers/Flurry.saver" moduleName -string "Flurry" type -int 0
-defaults -currentHost write com.apple.screensaver idleTime -int 300
+defaults -currentHost write com.apple.screensaver idleTime -int 1200
 
 # Save screenshots to ~/Pictures/screenshots
 mkdir ~/Pictures/screenshots

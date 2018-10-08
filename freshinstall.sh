@@ -159,13 +159,13 @@ fi;
 # STEP 2: SSH                                                                 #
 ###############################################################################
 
-# if [ "$lastsuccessfullstep" -lt "2" ]; then
-# 	showheader
-# 	echo -e "\n\033[4m\033[1mStep 2: SSH\033[0m"
-# 	source ./steps/2.ssh.sh
-# 	defaults write us.bram.freshinstall step 2
-# 	pressanykeytocontinue
-# fi;
+if [ "$lastsuccessfullstep" -lt "2" ]; then
+	showheader
+	echo -e "\n\033[4m\033[1mStep 2: SSH (Skipped)\033[0m"
+	# source ./steps/2.ssh.sh
+	defaults write us.bram.freshinstall step 2
+	pressanykeytocontinue
+fi;
 
 ###############################################################################
 # STEP 3: ESSENTIALS                                                          #
@@ -183,13 +183,13 @@ fi;
 # STEP 4: DOTFILES                                                            #
 ###############################################################################
 
-# if [ "$lastsuccessfullstep" -lt "4" ]; then
-# 	showheader
-# 	echo -e "\n\033[4m\033[1mStep 4: Dotfiles\033[0m"
-# 	source ./steps/4.dotfiles.sh
-# 	defaults write us.bram.freshinstall step 4
-# 	askforrestart
-# fi;
+if [ "$lastsuccessfullstep" -lt "4" ]; then
+	showheader
+	echo -e "\n\033[4m\033[1mStep 4: Dotfiles (Skipped)\033[0m"
+	# source ./steps/4.dotfiles.sh
+	defaults write us.bram.freshinstall step 4
+	pressanykeytocontinue
+fi;
 
 ###############################################################################
 # STEP 5: SOFTWARE                                                            #

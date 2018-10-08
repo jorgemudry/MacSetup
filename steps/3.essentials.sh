@@ -102,22 +102,25 @@ echo -e "\n- Git: "
 
 echo -ne "\n  - Installation Status      "
 
-GIT_NEEDS_TO_BE_INSTALLED="no"
-if [ -n "$(which git)" ]; then
-	if [ ! -n "$(git --version) | grep "Apple"" ]; then # we don't want the Apple version
-		echo -e "\033[33mNeeds upgrade\033[0m"
-		GIT_NEEDS_TO_BE_INSTALLED="yes"
-	else
-		echo -e "\033[32mInstalled\033[0m"
-	fi;
-else
-	echo -e "\033[31mNot Installed\033[0m"
-	GIT_NEEDS_TO_BE_INSTALLED="yes"
-fi;
+# GIT_NEEDS_TO_BE_INSTALLED="no"
+# if [ -n "$(which git)" ]; then
+# 	if [ ! -n "$(git --version) | grep "Apple"" ]; then # we don't want the Apple version
+# 		echo -e "\033[33mNeeds upgrade\033[0m"
+# 		GIT_NEEDS_TO_BE_INSTALLED="yes"
+# 	else
+# 		echo -e "\033[32mInstalled\033[0m"
+# 	fi;
+# else
+# 	echo -e "\033[31mNot Installed\033[0m"
+# 	GIT_NEEDS_TO_BE_INSTALLED="yes"
+# fi;
 
-if [ "$GIT_NEEDS_TO_BE_INSTALLED" = "yes" ]; then
-	brew install git
-fi;
+# if [ "$GIT_NEEDS_TO_BE_INSTALLED" = "yes" ]; then
+# 	brew install git
+# fi;
+
+# Always try to install git with brew
+brew install git
 
 echo -e "\033[32mOK\033[0m"
 

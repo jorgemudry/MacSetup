@@ -40,21 +40,35 @@ With successive runs, `./freshinstall` will pick up where it left. If you do wan
 
 1. macOS Defaults **(reboot required)**
 
-	This step will set some (opinionated) macOS defaults.
+    This step will set some (opinionated) macOS defaults.
 
-2. Essentials
+2. SSH Configuration (Skipped)
 
-	This step will install some required essentials. These include:
+    This step will check your SSH Configuration, and create an SSH key if none has been created yet.
 
-	- Xcode and its Command Line Tools
-	- Homebrew
-	- Git
+3. Essentials
 
-	The git installation will also do some basic configuration ;)
+    This step will install some required essentials. These include:
 
-3. Software
+    - Xcode and its Command Line Tools
+    - Homebrew
+    - Git
 
-	Handpicked selection of Software + Config in some cases
+    The git installation will also do some basic configuration ;)
+
+4. Dotfiles (Skipped)
+
+    This step will copy over the defined dotfiles. Included things are:
+
+    - A customized prompt
+    - Git branch autocompletion
+    - Makefile autocompletion
+
+    _Note that these files (`.bash_profile` and such) will be altered in later steps, upon installing specific pieces of software_
+
+5. Software
+
+    Handpicked selection of Software + Config in some cases
 
 ## License
 

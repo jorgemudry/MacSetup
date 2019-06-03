@@ -81,16 +81,16 @@ fi;
 
 # Brew Cask FTW!
 echo -ne "  - Brew Cask                "
-brew tap caskroom/cask 2>&1 > /dev/null
-brew tap caskroom/versions 2>&1 > /dev/null
+brew tap homebrew/cask 2>&1 > /dev/null
+brew tap homebrew/versions 2>&1 > /dev/null
 
 if [ "$(brew --version 2>&1 | grep "homebrew-cask")" ]; then
 	echo -e "\033[32mOK\033[0m"
 else
 	echo -e "\033[31mNOK\033[0m"
 	echo -e "\n\033[93mUh oh, installation of Brew Cask failed … please try running the following commands manually and see what goes wrong.\nIf all is OK afterwards, then restart ./freshinstall\033[0m\n"
-	echo -e " - brew tap caskroom/cask"
-	echo -e " - brew tap caskroom/versions"
+	echo -e " - brew tap homebrew/cask"
+	echo -e " - brew tap homebrew/versions"
 	exit
 fi;
 

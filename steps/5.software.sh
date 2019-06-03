@@ -189,6 +189,7 @@ brew install bat
 brew install prettyping
 # https://github.com/junegunn/fzf
 brew install fzf
+$(brew --prefix)/opt/fzf/install --all
 # https://github.com/so-fancy/diff-so-fancy
 brew install diff-so-fancy
 # https://github.com/sharkdp/fd/
@@ -239,7 +240,7 @@ curl -sS https://getcomposer.org/installer | php -- --install-dir=/usr/local/bin
 
 # Newer PHP Versions
 brew install php
-brew install php@7.1
+brew install php@7.3
 
 brew services start php
 brew link php
@@ -250,8 +251,8 @@ brew link php
 # @note: You might wanna "sudo brew services restart php" after this
 
 # MySQL
-# brew install mysql
-# brew services start mysql
+brew install mysql
+brew services start mysql
 
 # # Tweak MySQL
 # mysqlpassword="root"

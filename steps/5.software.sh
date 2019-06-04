@@ -81,7 +81,7 @@ fi;
 # vim                                                                         #
 ###############################################################################
 
-brew install vim --with-override-system-vi
+brew install vim
 
 ###############################################################################
 # CTF tools                                                                   #
@@ -203,10 +203,10 @@ brew install tldr
 # IMAGE & VIDEO PROCESSING                                                    #
 ###############################################################################
 
-brew install imagemagick --with-librsvg --with-webp
+brew install imagemagick --with-webp
 
 brew install libvpx
-brew install ffmpeg --with-libass --with-libvorbis --with-libvpx --with-x265 --with-sdl2
+brew install ffmpeg --with-libvorbis --with-libvpx --with-x265 --with-sdl2
 brew install youtube-dl
 
 ###############################################################################

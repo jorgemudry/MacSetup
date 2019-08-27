@@ -386,7 +386,7 @@ brew cask install android-file-transfer
 # brew cask install onyx
 brew cask install cronnix
 # brew cask install tunnelbear
-# brew cask install nosleep
+brew cask install keepingyouawake
 
 
 # https://shauninman.com/archive/2016/10/20/day_o_2_mac_menu_bar_clock

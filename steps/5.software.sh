@@ -78,6 +78,12 @@ fi;
 
 
 ###############################################################################
+# Visual Studio Code                                                          #
+###############################################################################
+
+brew cask install visual-studio-code
+
+###############################################################################
 # vim                                                                         #
 ###############################################################################
 
@@ -241,6 +247,7 @@ curl -sS https://getcomposer.org/installer | php -- --install-dir=/usr/local/bin
 # Newer PHP Versions
 brew install php
 brew install php@7.3
+brew install php@7.2
 
 brew services start php
 brew link php
@@ -435,6 +442,9 @@ brew cask install evernote
 # https://www.telestream.net/screenflow/
 brew cask install https://raw.githubusercontent.com/grettir/homebrew-cask/36b240eeec68e993a928395d3afdcef1e32eb592/Casks/screenflow.rb
 
+# https://github.com/tonsky/FiraCode/wiki/Installing
+# https://github.com/tonsky/FiraCode/wiki/VS-Code-Instructions
+brew cask install font-fira-code
 ###############################################################################
 # ZSH                                                                         #
 ###############################################################################

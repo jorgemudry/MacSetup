@@ -372,6 +372,7 @@ brew install httpie
 brew install mackup
 brew install mc
 brew install htop
+brew install awscli
 
 # brew cask install 1password
 # brew cask install macpass
@@ -380,18 +381,19 @@ brew install htop
 brew cask install sequel-pro
 brew cask install vagrant
 brew cask install virtualbox
+brew cask install tableplus
 # brew cask install docker
 brew cask install paw
 brew cask install insomnia
 # brew cask install postman
 
 # Utilities
-brew cask install caffeine
+# brew cask install caffeine
 brew cask install coconutbattery
 brew cask install spectacle
 brew cask install android-file-transfer
 # brew cask install onyx
-brew cask install cronnix
+# brew cask install cronnix
 # brew cask install tunnelbear
 brew cask install keepingyouawake
 

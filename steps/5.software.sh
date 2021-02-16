@@ -44,7 +44,7 @@ brew install wget
 # Sublime Text                                                                #
 ###############################################################################
 
-brew cask install sublime-text
+brew install sublime-text
 
 # Make sure directories exists
 if [ ! -d "~/Library/Application Support/Sublime Text 3" ]; then
@@ -81,7 +81,7 @@ fi;
 # Visual Studio Code                                                          #
 ###############################################################################
 
-brew cask install visual-studio-code
+brew install visual-studio-code
 
 ###############################################################################
 # vim                                                                         #
@@ -180,9 +180,9 @@ brew install vim
 # BROWSERS                                                                    #
 ###############################################################################
 
-brew cask install google-chrome
-brew cask install firefox
-brew cask install opera
+brew install google-chrome
+brew install firefox
+brew install opera
 
 ###############################################################################
 # CLI Improved Tools                                                          #
@@ -220,16 +220,16 @@ brew install youtube-dl
 ###############################################################################
 
 # https://github.com/sindresorhus/quick-look-plugins
-brew cask install qlcolorcode
-brew cask install qlstephen
-brew cask install qlmarkdown
-brew cask install quicklook-json
-brew cask install qlimagesize
-brew cask install suspicious-package
-brew cask install qlvideo
+brew install qlcolorcode
+brew install qlstephen
+brew install qlmarkdown
+brew install quicklook-json
+brew install qlimagesize
+brew install suspicious-package
+brew install qlvideo
 
-brew cask install provisionql
-brew cask install quicklookapk
+brew install provisionql
+brew install quicklookapk
 
 # restart quicklook
 defaults write org.n8gray.QLColorCode extraHLFlags '-l'
@@ -289,7 +289,7 @@ brew services start mysql
 ###############################################################################
 
 # Install it
-brew cask install transmission
+brew install transmission
 
 # Use `~/Downloads/torrents` to store incomplete downloads
 defaults write org.m0k.transmission UseIncompleteDownloadFolder -bool true
@@ -341,7 +341,7 @@ defaults write org.m0k.transmission UploadLimit -int 5
 # iTerm + Config                                                              #
 ###############################################################################
 
-brew cask install iterm2
+brew install iterm2
 # Don’t display the annoying prompt when quitting iTerm
 defaults write com.googlecode.iterm2 PromptOnQuit -bool false
 
@@ -374,79 +374,79 @@ brew install mc
 brew install htop
 brew install awscli
 
-# brew cask install 1password
-# brew cask install macpass
+# brew install 1password
+# brew install macpass
 
 # Development
-brew cask install sequel-pro
-brew cask install vagrant
-brew cask install virtualbox
-brew cask install tableplus
-# brew cask install docker
-brew cask install paw
-brew cask install insomnia
-# brew cask install postman
+brew install sequel-pro
+brew install vagrant
+brew install virtualbox
+brew install tableplus
+# brew install docker
+brew install paw
+brew install insomnia
+# brew install postman
 
 # Utilities
-# brew cask install caffeine
-brew cask install coconutbattery
-brew cask install spectacle
-brew cask install android-file-transfer
-# brew cask install onyx
-# brew cask install cronnix
-# brew cask install tunnelbear
-brew cask install keepingyouawake
+# brew install caffeine
+brew install coconutbattery
+brew install spectacle
+brew install android-file-transfer
+# brew install onyx
+# brew install cronnix
+# brew install tunnelbear
+brew install keepingyouawake
 
 
 # https://shauninman.com/archive/2016/10/20/day_o_2_mac_menu_bar_clock
-brew cask install day-o
+brew install day-o
 # https://www.deltawalker.com/
-brew cask install deltawalker
+brew install deltawalker
 
 # Media
-brew cask install vlc
+brew install vlc
 # duti -s org.videolan.vlc public.avi all
-brew cask install spotify
+brew install spotify
 # https://handbrake.fr/
-brew cask install handbrake
+brew install handbrake
 # https://mkvtoolnix.download/
 # brew install mkvtoolnix
 # https://www.makemkv.com/
-# brew cask install makemkv
+# brew install makemkv
 # https://www.flixtools.com/
-brew cask install flixtools
+brew install flixtools
 
 # https://www.charlesproxy.com/
-brew cask install charles
-brew cask install ngrok
+brew install charles
+brew install ngrok
 
 # Messaging
-brew cask install skype
-# brew cask install google-hangouts
-# brew cask install limechat
-# brew cask install telegram
-# brew cask install hipchat
-# brew cask install whatsapp
+brew install skype
+# brew install google-hangouts
+# brew install limechat
+# brew install telegram
+# brew install hipchat
+# brew install whatsapp
 
 # Productivity
-brew cask install dropbox
-# brew cask install google-drive
-brew cask install evernote
-# brew cask install skitch
-# brew cask install jumpcut
+brew install dropbox
+# brew install google-drive
+brew install evernote
+# brew install skitch
+# brew install jumpcut
 
 # https://theunarchiver.com/archive-browser
-# brew cask install the-archive-browser
+# brew install the-archive-browser
 # https://pngmini.com/
-# brew cask install imagealpha
+# brew install imagealpha
 
 # Locking down to this version (no serial for later version)
 # https://www.telestream.net/screenflow/
-brew cask install https://raw.githubusercontent.com/grettir/homebrew-cask/36b240eeec68e993a928395d3afdcef1e32eb592/Casks/screenflow.rb
+brew install https://raw.githubusercontent.com/grettir/homebrew-cask/36b240eeec68e993a928395d3afdcef1e32eb592/Casks/screenflow.rb
 
 # https://github.com/tonsky/FiraCode/wiki/Installing
 # https://github.com/tonsky/FiraCode/wiki/VS-Code-Instructions
-brew cask install font-fira-code
+brew install font-fira-code
 ###############################################################################
 # ZSH                                                                         #
 ###############################################################################

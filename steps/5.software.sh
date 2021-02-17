@@ -212,7 +212,7 @@ brew install tldr
 brew install imagemagick --with-webp
 
 brew install libvpx
-brew install ffmpeg --with-libvorbis --with-libvpx --with-x265 --with-sdl2
+brew install ffmpeg --with-libvpx --with-x265 --with-sdl2
 brew install youtube-dl
 
 ###############################################################################
@@ -221,7 +221,7 @@ brew install youtube-dl
 
 # https://github.com/sindresorhus/quick-look-plugins
 brew install qlcolorcode
-brew install qlstephen
+# brew install qlstephen
 brew install qlmarkdown
 brew install quicklook-json
 brew install qlimagesize
@@ -246,8 +246,8 @@ curl -sS https://getcomposer.org/installer | php -- --install-dir=/usr/local/bin
 
 # Newer PHP Versions
 brew install php
+brew install php@7.4
 brew install php@7.3
-brew install php@7.2
 
 brew services start php
 brew link php
@@ -391,6 +391,7 @@ brew install insomnia
 # brew install caffeine
 brew install coconutbattery
 brew install spectacle
+brew install alfred
 brew install android-file-transfer
 # brew install onyx
 # brew install cronnix
@@ -422,6 +423,7 @@ brew install ngrok
 
 # Messaging
 brew install skype
+brew install slack
 # brew install google-hangouts
 # brew install limechat
 # brew install telegram

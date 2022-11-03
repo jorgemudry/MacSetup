@@ -401,6 +401,7 @@ brew install android-file-transfer
 # brew install cronnix
 # brew install tunnelbear
 brew install keepingyouawake
+brew install cyberghost-vpn
 
 
 # https://shauninman.com/archive/2016/10/20/day_o_2_mac_menu_bar_clock

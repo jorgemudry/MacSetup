@@ -376,6 +376,7 @@ brew install mc
 brew install htop
 brew install awscli
 brew install obsidian
+brew install stockfish
 
 # brew install 1password
 # brew install macpass
@@ -427,11 +428,11 @@ brew install ngrok
 # Messaging
 brew install skype
 brew install slack
-# brew install google-hangouts
+brew install discord
 # brew install limechat
 # brew install telegram
 # brew install hipchat
-# brew install whatsapp
+brew install whatsapp
 
 # Productivity
 brew install dropbox

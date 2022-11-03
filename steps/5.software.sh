@@ -246,8 +246,10 @@ curl -sS https://getcomposer.org/installer | php -- --install-dir=/usr/local/bin
 
 # Newer PHP Versions
 brew install php
+brew install php@8.0
 brew install php@7.4
 brew install php@7.3
+brew install php@7.2
 
 brew services start php
 brew link php
@@ -373,23 +375,24 @@ brew install mackup
 brew install mc
 brew install htop
 brew install awscli
+brew install obsidian
 
 # brew install 1password
 # brew install macpass
 
 # Development
-brew install sequel-pro
+brew install sequel-ace
 brew install vagrant
 brew install virtualbox
 brew install tableplus
 # brew install docker
 brew install paw
 brew install insomnia
-# brew install postman
+brew install postman
 
 # Utilities
 # brew install caffeine
-brew install coconutbattery
+# brew install coconutbattery
 brew install spectacle
 brew install alfred
 brew install android-file-transfer
@@ -402,7 +405,7 @@ brew install keepingyouawake
 # https://shauninman.com/archive/2016/10/20/day_o_2_mac_menu_bar_clock
 brew install day-o
 # https://www.deltawalker.com/
-brew install deltawalker
+# brew install deltawalker
 
 # Media
 brew install vlc
@@ -418,7 +421,7 @@ brew install handbrake
 brew install flixtools
 
 # https://www.charlesproxy.com/
-brew install charles
+# brew install charles
 brew install ngrok
 
 # Messaging

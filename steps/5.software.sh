@@ -209,7 +209,7 @@ brew install tldr
 # IMAGE & VIDEO PROCESSING                                                    #
 ###############################################################################
 
-brew install imagemagick --with-webp
+# brew install imagemagick --with-webp
 
 brew install libvpx
 brew install ffmpeg --with-libvpx --with-x265 --with-sdl2
@@ -241,11 +241,9 @@ qlmanage -m
 # Composer + MySQL + Valet                                                    #
 ###############################################################################
 
-# Composer
-curl -sS https://getcomposer.org/installer | php -- --install-dir=/usr/local/bin --filename=composer
-
 # Newer PHP Versions
 brew install php
+brew install php@8.1
 brew install php@8.0
 brew install php@7.4
 brew install php@7.3
@@ -254,14 +252,17 @@ brew install php@7.2
 brew services start php
 brew link php
 
+# Composer
+curl -sS https://getcomposer.org/installer | php -- --install-dir=/usr/local/bin --filename=composer
+
 # pecl install mcrypt-1.0.1 # mcrypt for PHP 7.2
 # pecl install grpc # needed for google firestore et al
 
 # @note: You might wanna "sudo brew services restart php" after this
 
 # MySQL
-brew install mysql
-brew services start mysql
+# brew install mysql
+# brew services start mysql
 
 # # Tweak MySQL
 # mysqlpassword="root"
@@ -387,14 +388,15 @@ brew install vagrant
 brew install virtualbox
 brew install tableplus
 # brew install docker
-brew install paw
+brew install rapidapi
 brew install insomnia
 brew install postman
 
 # Utilities
 # brew install caffeine
 # brew install coconutbattery
-brew install spectacle
+# brew install spectacle
+brew install rectangle
 brew install alfred
 brew install android-file-transfer
 # brew install onyx
@@ -438,7 +440,8 @@ brew install whatsapp
 # Productivity
 brew install dropbox
 # brew install google-drive
-brew install evernote
+brew install notion
+# brew install evernote
 # brew install skitch
 # brew install jumpcut
 

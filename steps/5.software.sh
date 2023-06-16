@@ -242,14 +242,18 @@ qlmanage -m
 ###############################################################################
 
 # Newer PHP Versions
-brew install php
+brew tap shivammathur/php
 brew install php@8.1
 brew install php@8.0
-brew install php@7.4
-brew install php@7.3
-brew install php@7.2
+brew install shivammathur/php/php@7.4
+brew install shivammathur/php/php@7.3
+brew install shivammathur/php/php@7.2
+brew install shivammathur/php/php@7.1
+brew install shivammathur/php/php@7.0
+brew install php
 
-brew services start php
+# Stop php-fpm
+brew services stop php
 brew link php
 
 # Composer

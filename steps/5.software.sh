@@ -44,38 +44,25 @@ brew install wget
 # Sublime Text                                                                #
 ###############################################################################
 
-brew install sublime-text
+brew install --cask sublime-text
 
 # Make sure directories exists
-if [ ! -d "~/Library/Application Support/Sublime Text 3" ]; then
-	mkdir ~/Library/Application\ Support/Sublime\ Text\ 3
+if [ ! -d "~/Library/Application Support/Sublime Text" ]; then
+	mkdir ~/Library/Application\ Support/Sublime\ Text
 fi;
-if [ ! -d "~/Library/Application Support/Sublime Text 3/Installed Packages" ]; then
-	mkdir ~/Library/Application\ Support/Sublime\ Text\ 3/Installed\ Packages
+if [ ! -d "~/Library/Application Support/Sublime Text/Installed Packages" ]; then
+	mkdir ~/Library/Application\ Support/Sublime\ Text\/Installed\ Packages
 fi;
-if [ ! -d "~/Library/Application Support/Sublime Text 3/Packages" ]; then
-	mkdir ~/Library/Application\ Support/Sublime\ Text\ 3/Packages
+if [ ! -d "~/Library/Application Support/Sublime Text/Packages" ]; then
+	mkdir ~/Library/Application\ Support/Sublime\ Text/Packages
 fi;
-if [ ! -d "~/Library/Application Support/Sublime Text 3/Packages/User" ]; then
-	mkdir ~/Library/Application\ Support/Sublime\ Text\ 3/Packages/User
+if [ ! -d "~/Library/Application Support/Sublime Text/Packages/User" ]; then
+	mkdir ~/Library/Application\ Support/Sublime\ Text/Packages/User
 fi;
 
-# Open files by default with sublime using duti
-#
-# Note that duti is preferred over the command below, as that on requires a reboot
-# 	defaults write com.apple.LaunchServices LSHandlers -array-add '{"LSHandlerContentType" = "public.plain-text"; "LSHandlerPreferredVersions" = { "LSHandlerRoleAll" = "-"; }; LSHandlerRoleAll = "com.sublimetext.3";}'
-#
-# Some pointers:
-# - To get identifier of Sublime: /usr/libexec/PlistBuddy -c 'Print CFBundleIdentifier' /Applications/Sublime\ Text.app/Contents/Info.plist
-# - To get UTI of a file: mdls -name kMDItemContentTypeTree /path/to/file.ext
-#
-# Disabled until they make it compatible with mojave
-# brew install duti
-# duti -s com.sublimetext.3 public.data all # for files like ~/.bash_profile
-# duti -s com.sublimetext.3 public.plain-text all
-# duti -s com.sublimetext.3 public.script all
-# duti -s com.sublimetext.3 net.daringfireball.markdown all
-
+# Install Package Control
+# @ref https://github.com/joeyhoer/starter/blob/master/apps/sublime-text.sh
+cd ~/Library/Application\ Support/Sublime\ Text/Installed\ Packages && { curl -s -L -o "Package Control.sublime-package" https://packagecontrol.io/Package%20Control.sublime-package ; cd -; }
 
 ###############################################################################
 # Visual Studio Code                                                          #
@@ -132,39 +119,54 @@ brew install vim
 ###############################################################################
 # Mac App Store                                                               #
 ###############################################################################
-# Still not compatible with Mojave
-# brew install mas
+brew install mas
+# Apple ID
+if [ -n "$(defaults read NSGlobalDomain AppleID 2>&1 | grep -E "( does not exist)$")" ]; then
+	AppleID=""
+else
+	AppleID="$(defaults read NSGlobalDomain AppleID)"
+fi;
+echo -e "\nWhat's your Apple ID? (default: $AppleID)"
+echo -ne "> \033[34m\a"
+read
+echo -e "\033[0m\033[1A\n"
+[ -n "$REPLY" ] && AppleID=$REPLY
 
-# # Apple ID
-# if [ -n "$(defaults read NSGlobalDomain AppleID 2>&1 | grep -E "( does not exist)$")" ]; then
-# 	AppleID=""
-# else
-# 	AppleID="$(defaults read NSGlobalDomain AppleID)"
-# fi;
-# echo -e "\nWhat's your Apple ID? (default: $AppleID)"
-# echo -ne "> \033[34m\a"
-# read
-# echo -e "\033[0m\033[1A\n"
-# [ -n "$REPLY" ] && AppleID=$REPLY
+if [ "$AppleID" != "" ]; then
 
-# if [ "$AppleID" != "" ]; then
+	# Sign in
+	# No longer suppported: https://github.com/mas-cli/mas/issues/164
+	# But as we have already downloaded Xcode, we should already be logged into the store …
+	# mas signin $AppleID
 
-# 	# Sign in
-# 	mas signin $AppleID
+	# Xcode
+	# Already installed!
+	# mas install 497799835 # Xcode
 
-# 	# iWork
-# 	mas install 409203825 # Numbers
-# 	mas install 409201541 # Pages
-# 	mas install 409183694 # Keynote
+	# iWork
+#	mas install 409203825 # Numbers
+#	mas install 409201541 # Pages
+#	mas install 409183694 # Keynote
 
-# 	# Others
-# 	mas install 425424353 # The Unarchiver
-# 	mas install 946399090 # Telegram Desktop
-#     mas install 803453959 # Slack
-# 	mas install 417602904 # CloudApp
-#     mas install 1063631769 # Medis - GUI for Redis
+	# Others
+#	mas install 494803304 # Wifi Explorer
+	mas install 425424353 # The Unarchiver # @TODO: duti to have it handle zip files?
+#	mas install 404167149 # IP Scanner
+#	mas install 578078659 # ScreenSharingMenulet
+#	mas install 803453959 # Slack
+#	mas install 1006739057 # NepTunes (Last.fm Scrobbling)
+#	mas install 824171161 # Affinity Designer
+#	mas install 824183456 # Affinity Photo
+#	mas install 411643860 # DaisyDisk
+#	mas install 1019371109 # Balance Lock
+#	mas install 1470584107 # Dato
+#	mas install 1147396723 # WhatsApp
+#	mas install 1447043133 # Cursor Pro
+#	mas install 1572206224 # Keystroke Pro
+#	mas install 1563698880 # Mirror Magnet
+#	mas install 955848755 # Theine
 
-# fi;
+fi;
 
 
 ###############################################################################
@@ -180,9 +182,9 @@ brew install vim
 # BROWSERS                                                                    #
 ###############################################################################
 
-brew install google-chrome
-brew install firefox
-brew install opera
+brew install --cask google-chrome
+brew install --cask firefox
+brew install --cask microsoft-edge
 
 ###############################################################################
 # CLI Improved Tools                                                          #

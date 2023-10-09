@@ -4,7 +4,7 @@
 # PREVENT PEOPLE FROM SHOOTING THEMSELVES IN THE FOOT                         #
 ###############################################################################
 
-starting_script=`basename "$0"`
+starting_script=$(basename "$0")
 if [ "$starting_script" != "freshinstall.sh" ]; then
 	echo -e "\n\033[31m\aUhoh!\033[0m This script is part of freshinstall and should not be run by itself."
 	echo -e "Please launch freshinstall itself using \033[1m./freshinstall.sh\033[0m"
@@ -16,31 +16,61 @@ fi;
 # XCODE                                                                       #
 ###############################################################################
 
-echo -e "\n- Xcode Command Line Tools:\n"
+echo -e "\n- Xcode and Xcode Command Line Tools:\n"
+
+xcode_ok="yes"
+if [ -d "/Applications/Xcode.app" ]; then
+	xcode_installed="yes"
+else
+	xcode_installed="no"
+	xcode_ok="no"
+fi;
 
 # @ref https://github.com/Homebrew/install/blob/master/install#L110
 if [ ! -f "/Library/Developer/CommandLineTools/usr/bin/git" ] || [ ! -f "/usr/include/iconv.h" ]; then
-    xcodetools_installed="no"
+	xcodetools_installed="no"
+	xcode_ok="no"
 else
-    xcodetools_installed="yes"
+	xcodetools_installed="yes"
+fi;
+
+if [ "$xcode_installed" == "yes" ]; then
+	echo -e "  - Xcode                    \033[32mInstalled\033[0m"
+else
+	echo -e "  - Xcode                    \033[31mNot Installed\033[0m"
 fi;
 
 if [ "$xcodetools_installed" == "yes" ]; then
-    echo -e "  - Command Line Tools       \033[32mInstalled\033[0m"
+	echo -e "  - Command Line Tools       \033[32mInstalled\033[0m"
 else
-    echo -e "  - Command Line Tools       \033[31mNot Installed\033[0m"
+	echo -e "  - Command Line Tools       \033[31mNot Installed\033[0m"
 fi;
 
-if [ "$xcodetools_installed" == "no" ]; then
-    echo -e "\nLaunching installer for Xcode Command Line Tools …"
+if [ "$xcode_ok" == "no" ]; then
+	if [ "$xcode_installed" == "no" ]; then
+		echo -e "\nSorry, but Xcode needs to installed first …"
+		echo "Please install it using AppStore.app, and then relaunch this script."
+		# open "/Applications/App Store.app"
+		echo -e "\n\033[93mMy journey stops here (for now) … bye! 👋\033[0m\n"
+		exit
+	else
+		if [ "$xcodetools_installed" == "no" ]; then
+			echo -e "\Launching installer for Xcode Command Line Tools …"
 
-    xcode-select --install &>/dev/null
+			xcode-select --install &>/dev/null
 
-    echo -e "\nPress any key when the installer has finished."
-    read -n 1
+			echo -e "\nPress any key when the installer has finished."
+			read -n 1
 
+		fi;
+	fi;
 fi;
 
+# Accept the Xcode/iOS license agreement
+sudo xcodebuild -license accept
+
+# Enable Developer Mode
+DevToolsSecurity -enable 2>&1 > /dev/null
 ###############################################################################
 # HOMEBREW                                                                    #
 ###############################################################################
@@ -52,7 +82,11 @@ if [ -n "$(which brew)" ]; then
 	echo -e "\033[32mInstalled\033[0m"
 else
 	echo -e "\033[93mInstalling\033[0m"
-    /bin/bash -c "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/HEAD/install.sh)"
+	/bin/bash -c "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/HEAD/install.sh)"
+
+	echo 'eval "$(/opt/homebrew/bin/brew shellenv)"' >> "$HOME/.zprofile"
+	eval "$(/opt/homebrew/bin/brew shellenv)"
+
 	brew update
 fi;
 
@@ -77,21 +111,6 @@ if [ "$(brew doctor 2>&1 | grep "Error")" ]; then
 	exit
 else
 	echo -e "\033[32mOK\033[0m"
-fi;
-
-# Brew Cask FTW!
-echo -ne "  - Brew Cask                "
-brew tap homebrew/cask 2>&1 > /dev/null
-brew tap homebrew/cask-fonts 2>&1 > /dev/null
-
-if [ "$(brew --version 2>&1 | grep "homebrew-cask")" ]; then
-	echo -e "\033[32mOK\033[0m"
-else
-	echo -e "\033[31mNOK\033[0m"
-	echo -e "\n\033[93mUh oh, installation of Brew Cask failed … please try running the following commands manually and see what goes wrong.\nIf all is OK afterwards, then restart ./freshinstall\033[0m\n"
-	echo -e " - brew tap homebrew/cask"
-	echo -e " - brew tap homebrew/cask-fonts"
-	exit
 fi;
 
 ###############################################################################

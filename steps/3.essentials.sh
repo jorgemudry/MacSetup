@@ -15,62 +15,30 @@ fi;
 ###############################################################################
 # XCODE                                                                       #
 ###############################################################################
-
-echo -e "\n- Xcode and Xcode Command Line Tools:\n"
-
-xcode_ok="yes"
-if [ -d "/Applications/Xcode.app" ]; then
-	xcode_installed="yes"
-else
-	xcode_installed="no"
-	xcode_ok="no"
-fi;
+echo -e "\n- Xcode Command Line Tools:\n"
 
 # @ref https://github.com/Homebrew/install/blob/master/install#L110
 if [ ! -f "/Library/Developer/CommandLineTools/usr/bin/git" ] || [ ! -f "/usr/include/iconv.h" ]; then
-	xcodetools_installed="no"
-	xcode_ok="no"
+    xcodetools_installed="no"
 else
-	xcodetools_installed="yes"
-fi;
-
-if [ "$xcode_installed" == "yes" ]; then
-	echo -e "  - Xcode                    \033[32mInstalled\033[0m"
-else
-	echo -e "  - Xcode                    \033[31mNot Installed\033[0m"
+    xcodetools_installed="yes"
 fi;
 
 if [ "$xcodetools_installed" == "yes" ]; then
-	echo -e "  - Command Line Tools       \033[32mInstalled\033[0m"
+    echo -e "  - Command Line Tools       \033[32mInstalled\033[0m"
 else
-	echo -e "  - Command Line Tools       \033[31mNot Installed\033[0m"
+    echo -e "  - Command Line Tools       \033[31mNot Installed\033[0m"
 fi;
 
-if [ "$xcode_ok" == "no" ]; then
-	if [ "$xcode_installed" == "no" ]; then
-		echo -e "\nSorry, but Xcode needs to installed first …"
-		echo "Please install it using AppStore.app, and then relaunch this script."
-		# open "/Applications/App Store.app"
-		echo -e "\n\033[93mMy journey stops here (for now) … bye! 👋\033[0m\n"
-		exit
-	else
-		if [ "$xcodetools_installed" == "no" ]; then
-			echo -e "\Launching installer for Xcode Command Line Tools …"
+if [ "$xcodetools_installed" == "no" ]; then
+    echo -e "\nLaunching installer for Xcode Command Line Tools …"
 
-			xcode-select --install &>/dev/null
+    xcode-select --install &>/dev/null
 
-			echo -e "\nPress any key when the installer has finished."
-			read -n 1
+    echo -e "\nPress any key when the installer has finished."
+    read -n 1
 
-		fi;
-	fi;
 fi;
-
-# Accept the Xcode/iOS license agreement
-sudo xcodebuild -license accept
-
-# Enable Developer Mode
-DevToolsSecurity -enable 2>&1 > /dev/null
 ###############################################################################
 # HOMEBREW                                                                    #
 ###############################################################################

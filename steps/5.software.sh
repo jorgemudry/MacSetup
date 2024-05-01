@@ -224,7 +224,7 @@ brew install youtube-dl
 # https://github.com/sindresorhus/quick-look-plugins
 brew install qlcolorcode
 # brew install qlstephen
-brew install qlmarkdown
+# brew install qlmarkdown
 brew install quicklook-json
 brew install qlimagesize
 brew install suspicious-package
@@ -244,22 +244,22 @@ qlmanage -m
 ###############################################################################
 
 # Newer PHP Versions
-brew tap shivammathur/php
-brew install php@8.1
-brew install php@8.0
-brew install shivammathur/php/php@7.4
-brew install shivammathur/php/php@7.3
-brew install shivammathur/php/php@7.2
-brew install shivammathur/php/php@7.1
-brew install shivammathur/php/php@7.0
-brew install php
+# brew tap shivammathur/php
+# brew install php@8.1
+# brew install php@8.0
+# brew install shivammathur/php/php@7.4
+# brew install shivammathur/php/php@7.3
+# brew install shivammathur/php/php@7.2
+# brew install shivammathur/php/php@7.1
+# brew install shivammathur/php/php@7.0
+# brew install php
 
 # Stop php-fpm
-brew services stop php
-brew link php
+# brew services stop php
+# brew link php
 
 # Composer
-curl -sS https://getcomposer.org/installer | php -- --install-dir=/usr/local/bin --filename=composer
+# curl -sS https://getcomposer.org/installer | php -- --install-dir=/usr/local/bin --filename=composer
 
 # pecl install mcrypt-1.0.1 # mcrypt for PHP 7.2
 # pecl install grpc # needed for google firestore et al
@@ -390,13 +390,13 @@ brew install stockfish
 
 # Development
 brew install sequel-ace
-brew install vagrant
-brew install virtualbox
+# brew install vagrant
+# brew install virtualbox
 brew install tableplus
-# brew install docker
+brew install orbstack
 brew install rapidapi
 brew install insomnia
-brew install postman
+# brew install postman
 
 # Utilities
 # brew install caffeine
@@ -428,11 +428,11 @@ brew install handbrake
 # https://www.makemkv.com/
 # brew install makemkv
 # https://www.flixtools.com/
-brew install flixtools
+# brew install flixtools
 
 # https://www.charlesproxy.com/
 # brew install charles
-brew install ngrok
+# brew install ngrok
 
 # Messaging
 brew install skype

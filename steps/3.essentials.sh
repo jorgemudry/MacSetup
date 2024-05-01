@@ -59,16 +59,16 @@ else
 fi;
 
 # Make sure proper permissions are set …
-echo -ne "  - Folder permissions       "
-if [ "$(ls -ld /usr/local/Cellar/ | awk '{print $3}')" != "$(whoami)" ]; then
-	echo -e "\033[93mFixing\033[0m"
-	sudo chown -R $(whoami) /usr/local/Cellar
-	sudo chown -R $(whoami) /usr/local/Homebrew
-	sudo chown -R $(whoami) /usr/local/var/homebrew/locks
-	sudo chown -R $(whoami) /usr/local/etc /usr/local/lib /usr/local/sbin /usr/local/share /usr/local/var /usr/local/Frameworks /usr/local/share/locale /usr/local/share/man /usr/local/opt
-else
-	echo -e "\033[32mOK\033[0m"
-fi;
+# echo -ne "  - Folder permissions       "
+# if [ "$(ls -ld /usr/local/Cellar/ | awk '{print $3}')" != "$(whoami)" ]; then
+# 	echo -e "\033[93mFixing\033[0m"
+# 	sudo chown -R $(whoami) /usr/local/Cellar
+# 	sudo chown -R $(whoami) /usr/local/Homebrew
+# 	sudo chown -R $(whoami) /usr/local/var/homebrew/locks
+# 	sudo chown -R $(whoami) /usr/local/etc /usr/local/lib /usr/local/sbin /usr/local/share /usr/local/var /usr/local/Frameworks /usr/local/share/locale /usr/local/share/man /usr/local/opt
+# else
+# 	echo -e "\033[32mOK\033[0m"
+# fi;
 
 # Run brew doctor to be sure
 echo -ne "  - Check with “brew doctor” "

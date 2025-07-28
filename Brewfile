@@ -1,7 +1,8 @@
 # TAPS (Homebrew sources / repositories)
-tap "homebrew/bundle"    # Official Brew Bundle tap
-tap "ngrok/ngrok"        # ngrok tap
-tap "wpscanteam/tap"     # WPScan tap
+tap "homebrew/core"
+tap "homebrew/cask"
+tap "homebrew/cask-fonts"
+tap "buo/cask-upgrade"
 
 ###############################################################################
 # BREW FORMULAS
@@ -28,7 +29,7 @@ brew "speedtest-cli"     # Command line interface for speedtest.net
 brew "ssh-copy-id"       # Install SSH keys on a server
 brew "tldr"              # Simplified and community-driven man pages (https://tldr.sh/)
 brew "tree"              # Display directories as trees (recursive listing)
-brew "vim", args: { force: true, overwrite: true }  # Command-line text editor
+# brew "vim", args: { force: true, overwrite: true }  # Command-line text editor
 brew "wget"              # Network downloader
 brew "zsh", link: true, conflicts_with: ["zsh-completion"]    # Oh My Zsh is an open source, community-driven framework for managing your zsh configuration.
 
@@ -38,7 +39,7 @@ brew "php", link: true, conflicts_with: ["php@7.4", "php@8.0", "php@8.1", "php@8
 brew "pipx"              # Install and run Python CLI apps in isolation
 brew "pyenv"             # Python versions management
 brew "python@3.13", link: true, conflicts_with: ["python", "python3"]       # Python 3.13 (latest major version)
-brew "ruby", args: { force: true }
+# brew "ruby", args: { force: true }
 
 # 3) DevOps, Cloud & Networking
 brew "awscli"            # AWS command-line interface
@@ -68,7 +69,7 @@ brew "sqlmap" # SQL injection testing tool
 # brew "ucspi-tcp"
 # brew "xpdf"
 # brew "xz"
-brew "wpscanteam/tap/wpscan" # WordPress security scanner (from WPScan tap)
+# brew "wpscanteam/tap/wpscan" # WordPress security scanner (from WPScan tap)
 
 # 5) Multimedia & Processing
 brew "ffmpeg"            # Video/audio conversion and manipulation
@@ -82,7 +83,7 @@ brew "webkit2png"        # Convert web pages to PNG images
 brew "yt-dlp"            # YouTube downloader (community maintained fork)
 
 # 6) Miscellaneous
-brew "wallpaper"         # CLI to set wallpapers
+# brew "wallpaper"         # CLI to set wallpapers
 # brew "wimlib"            # Tools to handle WIM archives (Windows Imaging Format)
 
 ###############################################################################
@@ -97,7 +98,6 @@ cask "microsoft-edge"
 
 # 2) Communication & messaging
 cask "discord"
-cask "skype"
 cask "slack"
 cask "telegram"
 cask "whatsapp"
@@ -118,19 +118,19 @@ cask "qlvideo"           # QuickLook plugin for video thumbnails
 cask "quicklook-json"    # QuickLook JSON files
 
 # 4) Development / DevOps
-# cask "dynobase"          # GUI for DynamoDB
-cask "insomnia"             # API client for REST/GraphQL
-cask "iterm2", args: { force: true }               # Enhanced terminal emulator
-cask "jdownloader"          # Download manager
-# cask "ngrok"             # Secure tunnels to localhost
-cask "orbstack"             # Docker/WSL-like environment for macOS
-cask "postman"              # API development environment
-cask "rapidapi"             # RapidAPI client
-cask "sequel-ace"           # GUI for MySQL/MariaDB
-cask "sublime-text"         # Text/code editor
-cask "tableplus"            # Database GUI client
+# cask "dynobase"                       # GUI for DynamoDB
+cask "insomnia"                         # API client for REST/GraphQL
+cask "iterm2", args: { force: true }    # Enhanced terminal emulator
+cask "jdownloader"                      # Download manager
+# cask "ngrok"                          # Secure tunnels to localhost
+cask "orbstack"                         # Docker/WSL-like environment for macOS
+cask "postman"                          # API development environment
+cask "rapidapi"                         # RapidAPI client
+cask "sequel-ace"                       # GUI for MySQL/MariaDB
+cask "sublime-text"                     # Text/code editor
+cask "tableplus"                        # Database GUI client
 cask "visual-studio-code", args: { force: true }   # Code editor (VS Code)
-cask "font-fira-code"       # Fira Code Font (https://github.com/tonsky/FiraCode/wiki/Installing)
+cask "font-fira-code"                   # Fira Code Font (https://github.com/tonsky/FiraCode/wiki/Installing)
 
 # 5) Multimedia / Entertainment
 cask "android-file-transfer"

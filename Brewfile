@@ -1,7 +1,6 @@
 # TAPS (Homebrew sources / repositories)
 tap "homebrew/core"
 tap "homebrew/cask"
-tap "homebrew/cask-fonts"
 tap "buo/cask-upgrade"
 
 ###############################################################################
@@ -35,7 +34,7 @@ brew "zsh", link: true, conflicts_with: ["zsh-completion"]    # Oh My Zsh is an 
 
 # 2) Programming languages / environment
 # brew "cryptography", restart_service: true  # Python cryptography library
-brew "php", link: true, conflicts_with: ["php@7.4", "php@8.0", "php@8.1", "php@8.2", "php@8.3"] # PHP language
+# brew "php", link: true, conflicts_with: ["php@7.4", "php@8.0", "php@8.1", "php@8.2", "php@8.3"] # PHP language
 brew "pipx"              # Install and run Python CLI apps in isolation
 brew "pyenv"             # Python versions management
 brew "python@3.13", link: true, conflicts_with: ["python", "python3"]       # Python 3.13 (latest major version)
@@ -119,7 +118,7 @@ cask "quicklook-json"    # QuickLook JSON files
 
 # 4) Development / DevOps
 # cask "dynobase"                       # GUI for DynamoDB
-cask "insomnia"                         # API client for REST/GraphQL
+# cask "insomnia"                         # API client for REST/GraphQL
 cask "iterm2", args: { force: true }    # Enhanced terminal emulator
 cask "jdownloader"                      # Download manager
 # cask "ngrok"                          # Secure tunnels to localhost
@@ -136,6 +135,12 @@ cask "font-fira-code"                   # Fira Code Font (https://github.com/ton
 cask "android-file-transfer"
 cask "spotify"
 cask "vlc"
+
+# 6) AI
+cask "claude"                   # Anthropic's official Claude AI desktop app
+cask "claude-code"              # Terminal-based AI coding assistant
+cask "chatgpt"                  # OpenAI's official ChatGPT desktop app
+cask "gemini-cli"               # Interact with Google Gemini AI models from the command-line
 
 ###############################################################################
 # MAS (Mac App Store apps)

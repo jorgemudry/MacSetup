@@ -125,6 +125,7 @@ cask "jdownloader"                      # Download manager
 cask "orbstack"                         # Docker/WSL-like environment for macOS
 cask "postman"                          # API development environment
 cask "rapidapi"                         # RapidAPI client
+cask "apidog"                           # APIDog client
 cask "sequel-ace"                       # GUI for MySQL/MariaDB
 cask "sublime-text"                     # Text/code editor
 cask "tableplus"                        # Database GUI client

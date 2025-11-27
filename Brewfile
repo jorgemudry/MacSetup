@@ -109,6 +109,7 @@ cask "notion"               # Note-taking & collaboration
 # cask "obsidian"             # Markdown-based note-taking
 cask "rectangle"            # Window management
 cask "suspicious-package"   # Inspect .pkg installers
+cask "shottr"               # Screenshot measurement and annotation tool
 
 # Quick Look Plugins
 cask "provisionql"       # QuickLook for .mobileprovision files

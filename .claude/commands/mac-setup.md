@@ -14,7 +14,7 @@ sudo -n true 2>/dev/null && echo "sudo OK" || echo "sudo NOT active"
 ```
 
 If sudo is NOT active, tell the user:
-> "This setup requires sudo. Please run `sudo -v` in your terminal, enter your password, then tell me to continue."
+> "This setup requires sudo. Please exit Claude Code (type `/exit` or press Ctrl+C), run `sudo -v` in your terminal, enter your password, then start Claude Code again and re-run `/mac-setup`."
 
 Do NOT proceed until `sudo -n true` succeeds. Once confirmed, start a keep-alive loop:
 

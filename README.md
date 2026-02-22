@@ -1,74 +1,131 @@
-```
-###############################################################################################################################################
-#                                                                                                                                             #
-#   :::::::::: :::::::::  ::::::::::  ::::::::  :::    ::: ::::::::::: ::::    :::  ::::::::  :::::::::::     :::     :::        :::          #
-#   :+:        :+:    :+: :+:        :+:    :+: :+:    :+:     :+:     :+:+:   :+: :+:    :+:     :+:       :+: :+:   :+:        :+:          #
-#   +:+        +:+    +:+ +:+        +:+        +:+    +:+     +:+     :+:+:+  +:+ +:+            +:+      +:+   +:+  +:+        +:+          #
-#   :#::+::#   +#++:++#:  +#++:++#   +#++:++#++ +#++:++#++     +#+     +#+ +:+ +#+ +#++:++#++     +#+     +#++:++#++: +#+        +#+          #
-#   +#+        +#+    +#+ +#+               +#+ +#+    +#+     +#+     +#+  +#+#+#        +#+     +#+     +#+     +#+ +#+        +#+          #
-#   #+#        #+#    #+# #+#        #+#    #+# #+#    #+#     #+#     #+#   #+#+# #+#    #+#     #+#     #+#     #+# #+#        #+#          #
-#   ###        ###    ### ##########  ########  ###    ### ########### ###    ####  ########      ###     ###     ### ########## ##########   #
-#                                                                                                                                             #
-###############################################################################################################################################
-```
+# MacSetup
 
-# So you want to set up a new Mac aye?
+Automated macOS setup and provisioning framework. Handles two phases of Mac provisioning:
 
-Good, `./freshinstall` will help you out with that.
+- **Before formatting** — back up files, export configs, check for uncommitted git changes
+- **After formatting** — install software via Homebrew, apply system preferences, configure dev environment
 
-## Installation
+## Quick Start
 
-Via Terminal _(maximize the window for the best effect)_:
+On a fresh (or existing) Mac, open Terminal and run:
 
-```
-mkdir ~/Downloads/freshinstall
-cd ~/Downloads/freshinstall
-curl -#L https://github.com/jorgemudry/macsetup/tarball/master | tar -xzv --strip-components 1 --exclude={LICENSE}
+```bash
+mkdir ~/MacSetup && cd ~/MacSetup
+curl -#L https://github.com/jorgemudry/MacSetup/tarball/master | tar -xzv --strip-components 1 --exclude={LICENSE}
 ```
 
-## Usage
+> No git required — `curl` and `tar` come pre-installed on macOS.
 
-Also via Terminal:
+Then choose how you want to run it:
+
+### Option A: Interactive Menu
+
+```bash
+./start.sh
+```
+
+This launches a menu-driven interface with all available operations:
 
 ```
-./freshinstall.sh
+Before - Preparing your Mac to be formatted:
+1. Files Backup          — Back up Downloads/Pictures to external drive
+2. Config Backup         — Back up configs (stub)
+3. Git Changes Check     — Scan for uncommitted git changes
+4. Ready to Format       — Pre-format validation (stub)
+
+After - Start your clean Mac setup:
+5. Settings              — Apply 70+ macOS system preferences
+6. Software              — Install Xcode CLT, Homebrew, Brewfile, iTerm2, Oh My Zsh
+7. Final Setup           — Post-install configuration (stub)
+
+8. Exit
 ```
 
-With successive runs, `./freshinstall` will pick up where it left. If you do want to start all over again, use `--force`.
+> Items marked "stub" have placeholder scripts. For full coverage of those steps, use Claude Code (Option B).
 
-## Steps
+### Option B: With Claude Code
 
-1. macOS Defaults **(reboot required)**
+[Claude Code](https://docs.anthropic.com/en/docs/claude-code) is a terminal-based AI coding agent that can run the setup interactively, fill in the gaps where scripts are stubs, and guide you through the entire process.
 
-    This step will set some (opinionated) macOS defaults.
+Two custom skills are included in this repo:
 
-2. SSH Configuration (Skipped)
+| Skill | Description |
+|-------|-------------|
+| `/mac-backup` | Full pre-format workflow: file backup, config export, git check, readiness checklist |
+| `/mac-setup` | Full post-format workflow: software install, system settings, SSH/git config, restore |
 
-    This step will check your SSH Configuration, and create an SSH key if none has been created yet.
+#### Installing Claude Code
 
-3. Essentials
+**On a fresh Mac** (nothing installed yet):
 
-    This step will install some required essentials. These include:
+1. Install Node.js — download the macOS installer from [nodejs.org](https://nodejs.org/) (LTS recommended)
+2. Install Claude Code:
+   ```bash
+   npm install -g @anthropic-ai/claude-code
+   ```
+3. Download this repo (see [Quick Start](#quick-start) above), then:
+   ```bash
+   cd ~/MacSetup
+   claude
+   ```
+4. Once inside Claude Code, type `/mac-backup` or `/mac-setup` to start
 
-    - Xcode and its Command Line Tools
-    - Homebrew
-    - Git
+**On a Mac with Homebrew already installed:**
 
-    The git installation will also do some basic configuration ;)
+```bash
+brew install node
+npm install -g @anthropic-ai/claude-code
+```
 
-4. Dotfiles (Skipped)
+> After running `/mac-setup`, Claude Code will also be installed as a cask from the Brewfile for future use.
 
-    This step will copy over the defined dotfiles. Included things are:
+#### Using the skills
 
-    - A customized prompt
-    - Git branch autocompletion
-    - Makefile autocompletion
+Start Claude Code from the repo directory:
 
-    _Note that these files (`.bash_profile` and such) will be altered in later steps, upon installing specific pieces of software_
+```bash
+cd ~/MacSetup
+claude
+```
 
-5. Software
+Then type `/mac-backup` or `/mac-setup` to launch the corresponding workflow. Claude will walk you through each phase interactively, running the existing shell scripts where they exist and providing intelligent guidance where they don't.
 
-    Handpicked selection of Software + Config in some cases
+## What's in the Brewfile
+
+The `Brewfile` is a declarative manifest used by `brew bundle` to install everything in one shot. It includes:
+
+- **CLI tools** — bat, fd, fzf, htop, jq, tldr, tree, wget, and more
+- **Languages** — Python 3.13, pyenv, pipx
+- **DevOps** — awscli, cloudflared, openshift-cli
+- **Browsers** — Brave, Firefox, Chrome, Edge
+- **Communication** — Discord, Slack, Telegram, WhatsApp
+- **Development** — iTerm2, VS Code, Sublime Text, OrbStack, TablePlus, Sequel Ace, Postman
+- **Productivity** — Alfred, Rectangle, Notion, Dropbox
+- **AI** — Claude, Claude Code, ChatGPT, Gemini CLI
+- **Multimedia** — Spotify, VLC, ffmpeg, yt-dlp
+- **Mac App Store** — OneNote, The Unarchiver, WireGuard, Stockfish
+
+Edit the `Brewfile` to add or remove packages before running the setup.
+
+## Project Structure
+
+```
+start.sh                          # Entry point — interactive menu
+Brewfile                          # Declarative Homebrew manifest
+├── scripts/common.sh             # Shared utilities (colors, sudo, execute_command)
+├── scripts/before/
+│   ├── files_backup.sh           # Back up Downloads/Pictures via rsync
+│   ├── config_backup.sh          # Config backup (stub)
+│   ├── git_check.sh              # Scan directories for uncommitted git changes
+│   └── ready_format.sh           # Pre-format validation (stub)
+├── scripts/after/
+│   ├── settings.sh               # Apply 70+ macOS defaults (UI, Finder, Dock, etc.)
+│   ├── software.sh               # Install Xcode CLT, Homebrew, Brewfile, iTerm2, Oh My Zsh
+│   └── final_setup.sh            # Final configuration (stub)
+└── .claude/commands/
+    ├── mac-backup.md             # /mac-backup skill for Claude Code
+    └── mac-setup.md              # /mac-setup skill for Claude Code
+```
 
 ## License
 
@@ -76,15 +133,11 @@ The MIT License (MIT). Please see [License File](LICENSE) for more information.
 
 ## Credits
 
-- Bram(us) Van Damme <em>([https://www.bram.us/](https://www.bram.us/))</em>
+- Bram(us) Van Damme _([https://www.bram.us/](https://www.bram.us/))_
 - [All Contributors](../../contributors)
 
 ## Resources
 
 - https://github.com/mathiasbynens/dotfiles
-- https://github.com/paulirish/dotfiles
 - https://github.com/herrbischoff/awesome-osx-command-line
-- https://superuser.com/a/1123198
-- https://github.com/joeyhoer/starter/blob/master/apps/sublime-text.sh
-- https://gist.github.com/agrcrobles/165ac477a9ee51198f4a870c723cd441
-- https://github.com/hjuutilainen/dotfiles/tree/master/bin
+- https://docs.anthropic.com/en/docs/claude-code

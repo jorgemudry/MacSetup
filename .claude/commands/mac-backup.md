@@ -7,6 +7,17 @@ allowed-tools: Bash, Read, Glob, Grep
 
 You are guiding the user through backing up their Mac before a format/reinstall. Work through each phase interactively, confirming with the user before proceeding to the next.
 
+**Important**: Some steps (e.g. Wi-Fi password retrieval) require `sudo`. Before running any sudo commands, verify sudo is available:
+
+```bash
+sudo -n true 2>/dev/null && echo "sudo OK" || echo "sudo NOT active"
+```
+
+If sudo is NOT active, tell the user:
+> "This step requires sudo. Please run `sudo -v` in your terminal, enter your password, then tell me to continue."
+
+Do NOT run any `sudo` command until `sudo -n true` succeeds.
+
 ## Phase 1: File Backup
 
 Help the user back up important files to an external drive or network location.

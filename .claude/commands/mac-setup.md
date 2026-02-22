@@ -7,10 +7,22 @@ allowed-tools: Bash, Read, Glob, Grep
 
 You are guiding the user through setting up a freshly formatted Mac. Work through each phase interactively, confirming with the user before proceeding to the next.
 
-**Important**: Several steps require `sudo`. Ask the user for authentication upfront:
+**Important**: Several steps require `sudo`. Before running any scripts, verify sudo is available:
+
 ```bash
-sudo -v
+sudo -n true 2>/dev/null && echo "sudo OK" || echo "sudo NOT active"
 ```
+
+If sudo is NOT active, tell the user:
+> "This setup requires sudo. Please run `sudo -v` in your terminal, enter your password, then tell me to continue."
+
+Do NOT proceed until `sudo -n true` succeeds. Once confirmed, start a keep-alive loop:
+
+```bash
+while true; do sudo -n true; sleep 50; kill -0 $$ || exit; done 2>/dev/null &
+```
+
+All scripts must be called with `MACSETUP_NONINTERACTIVE=true` so they skip interactive prompts (password, press-any-key, reboot) that would hang in Claude Code.
 
 ## Phase 1: Software Installation
 
@@ -19,7 +31,7 @@ This phase uses the existing `scripts/after/software.sh` script which installs X
 Run the software installation:
 
 ```bash
-cd <repo-root> && MACSETUP_MAIN=true bash scripts/after/software.sh
+cd <repo-root> && MACSETUP_MAIN=true MACSETUP_NONINTERACTIVE=true bash scripts/after/software.sh
 ```
 
 Where `<repo-root>` is the root of this MacSetup repository. The script will:
@@ -51,12 +63,12 @@ Before running, inform the user this will:
 Run the settings script:
 
 ```bash
-cd <repo-root> && MACSETUP_MAIN=true bash scripts/after/settings.sh
+cd <repo-root> && MACSETUP_MAIN=true MACSETUP_NONINTERACTIVE=true bash scripts/after/settings.sh
 ```
 
 Where `<repo-root>` is the root of this MacSetup repository.
 
-**Note**: This script requires interactive input for the computer name and Apple ID. Let the user interact with those prompts directly.
+**Note**: This script requires interactive input for the computer name and Apple ID. Before running it, ask the user what computer name and Apple ID they want, then set them directly via `scutil` and `defaults write` commands instead of relying on the script's interactive prompts.
 
 ## Phase 3: Final Setup
 

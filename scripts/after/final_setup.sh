@@ -6,25 +6,75 @@ if [ "${MACSETUP_MAIN:-}" != "true" ]; then
 fi
 source ./scripts/common.sh
 
+# All symlink targets that must exist before we can proceed
+REQUIRED_TARGETS=(
+    "$HOME/Dropbox/Mackup/.aws"
+    "$HOME/Dropbox/Mackup/.bashrc"
+    "$HOME/Dropbox/Mackup/.boto"
+    "$HOME/Dropbox/Mackup/.editorconfig"
+    "$HOME/Dropbox/Mackup/.gdbinit"
+    "$HOME/Dropbox/Mackup/.gitconfig"
+    "$HOME/Dropbox/Config/home/.letmein"
+    "$HOME/Dropbox/Mackup/.mackup.cfg"
+    "$HOME/Dropbox/Config/home/.ssh"
+    "$HOME/Dropbox/Mackup/.subversion"
+    "$HOME/Dropbox/Mackup/.wget-hsts"
+    "$HOME/Dropbox/Mackup/.wp-cli"
+    "$HOME/Dropbox/Mackup/.zprofile"
+    "$HOME/Dropbox/Mackup/.zshrc"
+    "$HOME/Dropbox/Config/home/.claude/agents"
+    "$HOME/Dropbox/Config/home/.claude/CLAUDE.md"
+    "$HOME/Dropbox/Config/home/.claude/settings.json"
+    "$HOME/Dropbox/Mackup/.oh-my-zsh/custom/aliases.zsh"
+    "$HOME/Dropbox/Mackup/.oh-my-zsh/custom/functions.zsh"
+    "$HOME/Dropbox/Mackup/.oh-my-zsh/custom/plugins/zsh-syntax-highlighting"
+)
+
+function all_targets_synced {
+    for target in "${REQUIRED_TARGETS[@]}"; do
+        if [ ! -e "$target" ]; then
+            return 1
+        fi
+    done
+    return 0
+}
+
+function show_missing_targets {
+    for target in "${REQUIRED_TARGETS[@]}"; do
+        if [ ! -e "$target" ]; then
+            echo -e "  ${RED}missing:${NC} $target"
+        fi
+    done
+}
+
 function wait_for_dropbox {
     echo -e "\n${BLUE}=== Dropbox Setup ===${NC}"
     echo -e "${YELLOW}Please open Dropbox, sign in, and wait for sync to complete.${NC}"
     echo -e "You can open it with: ${GREEN}open -a Dropbox${NC}"
 
     if [[ "${MACSETUP_NONINTERACTIVE:-}" == "true" ]]; then
-        # Non-interactive: wait for a specific file deep in the tree to confirm sync is done
-        echo -e "${YELLOW}Waiting for Dropbox config files to fully sync...${NC}"
-        until [ -f "$HOME/Dropbox/Mackup/.zshrc" ] && [ -d "$HOME/Dropbox/Config/home/.ssh" ]; do
+        echo -e "${YELLOW}Waiting for all required Dropbox files to sync (${#REQUIRED_TARGETS[@]} targets)...${NC}"
+        while ! all_targets_synced; do
             sleep 10
         done
     else
-        echo -e "\n${YELLOW}Once Dropbox is fully synced, press any key to continue.${NC}"
-        echo -ne "${BLUE}Press any key when ready...${NC}"
-        read -r -n1 -s
-        echo
+        while true; do
+            echo -e "\n${YELLOW}Once Dropbox is fully synced, press any key to verify.${NC}"
+            echo -ne "${BLUE}Press any key when ready...${NC}"
+            read -r -n1 -s
+            echo
+
+            if all_targets_synced; then
+                break
+            fi
+
+            echo -e "\n${RED}Some files are still missing:${NC}"
+            show_missing_targets
+            echo -e "\n${YELLOW}Please wait for Dropbox to finish syncing.${NC}"
+        done
     fi
 
-    echo -e "${GREEN}Dropbox config files are ready!${NC}"
+    echo -e "${GREEN}All Dropbox config files are ready!${NC}"
 }
 
 function create_symlink {

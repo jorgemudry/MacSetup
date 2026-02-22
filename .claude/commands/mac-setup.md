@@ -71,59 +71,34 @@ Where `<repo-root>` is the root of this MacSetup repository.
 
 **Note**: This script requires interactive input for the computer name and Apple ID. Before running it, ask the user what computer name and Apple ID they want, then set them directly via `scutil` and `defaults write` commands instead of relying on the script's interactive prompts.
 
-## Phase 3: Final Setup
+## Phase 3: Final Setup — Dropbox & Config Restore
 
-The script `scripts/after/final_setup.sh` is a stub. Instead, perform these post-install tasks interactively:
+This phase uses `scripts/after/final_setup.sh`. It requires the user to set up Dropbox first (OAuth + 2FA cannot be automated).
 
-### SSH Key Generation
-If `~/.ssh/id_ed25519` does not exist, offer to generate a new SSH key:
+Tell the user:
+> "Please open Dropbox, sign in, and wait for sync to complete. The script will detect when your config files are ready and continue automatically."
+
+Then run the final setup script:
+
 ```bash
-ssh-keygen -t ed25519 -C "<user-email>"
-```
-Then add it to the ssh-agent:
-```bash
-eval "$(ssh-agent -s)"
-ssh-add ~/.ssh/id_ed25519
-```
-Offer to display the public key so the user can add it to GitHub/GitLab:
-```bash
-cat ~/.ssh/id_ed25519.pub
+cd <repo-root> && MACSETUP_MAIN=true MACSETUP_NONINTERACTIVE=true bash scripts/after/final_setup.sh
 ```
 
-### Git Global Configuration
-Ask the user for their name and email, then configure git:
-```bash
-git config --global user.name "<name>"
-git config --global user.email "<email>"
-git config --global init.defaultBranch main
-git config --global pull.rebase true
-git config --global core.editor "vim"
-```
-Ask if they want any additional git config (e.g., GPG signing, aliases).
+Where `<repo-root>` is the root of this MacSetup repository. The script will:
+1. Wait for `~/Dropbox/Mackup` and `~/Dropbox/Config` directories to appear
+2. Create symlinks from the home directory to Dropbox-synced configs (`.gitconfig`, `.zshrc`, `.ssh`, `.aws`, etc.)
+3. Create symlinks for Claude Code config (`~/.claude/CLAUDE.md`, `settings.json`, `agents`)
+4. Create symlinks for Oh My Zsh custom files (aliases, functions, plugins)
+5. Fix SSH key permissions (700 for `~/.ssh`, 600 for private keys, 644 for public keys)
 
-### Restore Configs via Mackup
-If `mackup` is installed (from the Brewfile), offer to restore backed-up configs:
-```bash
-mackup restore
-```
-
-### Restore Dotfiles
-If the user has a backup from `/mac-backup`, offer to restore dotfiles:
-- `~/.zshrc`
-- `~/.gitconfig`
-- `~/.ssh/`
-- Any others they backed up
-
-Ask the user for the backup location and use rsync to restore.
+**Note**: Git configuration and SSH keys are restored from Dropbox — no manual generation needed.
 
 ### Additional Post-Install Tasks
-Ask the user if they need any of these:
-- **Node.js setup**: Install nvm or use the Homebrew-installed node, set up global npm packages
+After the script completes, ask the user if they need any of these:
 - **Python setup**: Verify pyenv or Homebrew python is working, set up virtual environments
-- **Docker setup**: Verify Docker Desktop is running if installed via Brewfile
+- **Docker setup**: Verify OrbStack is running if installed via Brewfile
 - **VS Code / Cursor extensions**: Restore extensions from a list if they have one
 - **Terminal theme**: Import iTerm2 color scheme or configure terminal preferences
-- **Fonts**: Verify Nerd Fonts or other development fonts are installed
 
 ## Post-Setup Cleanup
 
@@ -144,7 +119,7 @@ sudo -n true 2>/dev/null && echo "WARNING: sudo still passwordless" || echo "sud
 After all phases are complete, provide a summary:
 - Software installation status (any failed packages)
 - System settings applied
-- SSH key configured (yes/no)
-- Git configured (yes/no)
+- Dropbox symlinks created (yes/no)
+- SSH permissions fixed (yes/no)
 - Temporary sudo rule removed (yes/no)
-- Any remaining manual steps the user should do (e.g., sign in to apps, set up cloud storage, configure IDE)
+- Any remaining manual steps the user should do (e.g., sign in to apps, configure IDE)

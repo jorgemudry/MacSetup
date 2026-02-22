@@ -113,7 +113,6 @@ cask "shottr"               # Screenshot measurement and annotation tool
 cask "provisionql"       # QuickLook for .mobileprovision files
 cask "qlcolorcode"       # QuickLook syntax highlighting
 cask "qlvideo"           # QuickLook plugin for video thumbnails
-cask "quicklook-json"    # QuickLook JSON files
 
 # 4) Development / DevOps
 # cask "dynobase"                       # GUI for DynamoDB

@@ -8,25 +8,21 @@ source ./scripts/common.sh
 
 function wait_for_dropbox {
     echo -e "\n${BLUE}=== Dropbox Setup ===${NC}"
-    echo -e "${YELLOW}Please open Dropbox, sign in, and complete sync before continuing.${NC}"
+    echo -e "${YELLOW}Please open Dropbox, sign in, and wait for sync to complete.${NC}"
     echo -e "You can open it with: ${GREEN}open -a Dropbox${NC}"
 
     if [[ "${MACSETUP_NONINTERACTIVE:-}" == "true" ]]; then
-        echo -e "${YELLOW}Waiting for Dropbox folder to appear at ~/Dropbox...${NC}"
+        # Non-interactive: wait for a specific file deep in the tree to confirm sync is done
+        echo -e "${YELLOW}Waiting for Dropbox config files to fully sync...${NC}"
+        until [ -f "$HOME/Dropbox/Mackup/.zshrc" ] && [ -d "$HOME/Dropbox/Config/home/.ssh" ]; do
+            sleep 10
+        done
     else
-        echo -e "\nOnce Dropbox is synced, press any key to continue."
+        echo -e "\n${YELLOW}Once Dropbox is fully synced, press any key to continue.${NC}"
+        echo -ne "${BLUE}Press any key when ready...${NC}"
+        read -r -n1 -s
+        echo
     fi
-
-    # Wait until ~/Dropbox exists
-    until [ -d "$HOME/Dropbox" ]; do
-        sleep 5
-    done
-
-    # Wait until the expected config directories are synced
-    echo -e "${YELLOW}Dropbox folder detected. Waiting for config files to sync...${NC}"
-    until [ -d "$HOME/Dropbox/Mackup" ] && [ -d "$HOME/Dropbox/Config" ]; do
-        sleep 5
-    done
 
     echo -e "${GREEN}Dropbox config files are ready!${NC}"
 }
@@ -49,54 +45,82 @@ function create_symlink {
 function setup_symlinks {
     echo -e "\n${BLUE}=== Creating Symlinks ===${NC}"
 
-    # Home directory symlinks
-    local -A home_links=(
-        ["$HOME/.aws"]="$HOME/Dropbox/Mackup/.aws"
-        ["$HOME/.bashrc"]="$HOME/Dropbox/Mackup/.bashrc"
-        ["$HOME/.boto"]="$HOME/Dropbox/Mackup/.boto"
-        ["$HOME/.editorconfig"]="$HOME/Dropbox/Mackup/.editorconfig"
-        ["$HOME/.gdbinit"]="$HOME/Dropbox/Mackup/.gdbinit"
-        ["$HOME/.gitconfig"]="$HOME/Dropbox/Mackup/.gitconfig"
-        ["$HOME/.letmein"]="$HOME/Dropbox/Config/home/.letmein"
-        ["$HOME/.mackup.cfg"]="$HOME/Dropbox/Mackup/.mackup.cfg"
-        ["$HOME/.ssh"]="$HOME/Dropbox/Config/home/.ssh"
-        ["$HOME/.subversion"]="$HOME/Dropbox/Mackup/.subversion"
-        ["$HOME/.wget-hsts"]="$HOME/Dropbox/Mackup/.wget-hsts"
-        ["$HOME/.wp-cli"]="$HOME/Dropbox/Mackup/.wp-cli"
-        ["$HOME/.zprofile"]="$HOME/Dropbox/Mackup/.zprofile"
-        ["$HOME/.zshrc"]="$HOME/Dropbox/Mackup/.zshrc"
+    # Home directory symlinks (target link pairs)
+    local home_targets=(
+        "$HOME/Dropbox/Mackup/.aws"
+        "$HOME/Dropbox/Mackup/.bashrc"
+        "$HOME/Dropbox/Mackup/.boto"
+        "$HOME/Dropbox/Mackup/.editorconfig"
+        "$HOME/Dropbox/Mackup/.gdbinit"
+        "$HOME/Dropbox/Mackup/.gitconfig"
+        "$HOME/Dropbox/Config/home/.letmein"
+        "$HOME/Dropbox/Mackup/.mackup.cfg"
+        "$HOME/Dropbox/Config/home/.ssh"
+        "$HOME/Dropbox/Mackup/.subversion"
+        "$HOME/Dropbox/Mackup/.wget-hsts"
+        "$HOME/Dropbox/Mackup/.wp-cli"
+        "$HOME/Dropbox/Mackup/.zprofile"
+        "$HOME/Dropbox/Mackup/.zshrc"
+    )
+    local home_links=(
+        "$HOME/.aws"
+        "$HOME/.bashrc"
+        "$HOME/.boto"
+        "$HOME/.editorconfig"
+        "$HOME/.gdbinit"
+        "$HOME/.gitconfig"
+        "$HOME/.letmein"
+        "$HOME/.mackup.cfg"
+        "$HOME/.ssh"
+        "$HOME/.subversion"
+        "$HOME/.wget-hsts"
+        "$HOME/.wp-cli"
+        "$HOME/.zprofile"
+        "$HOME/.zshrc"
     )
 
     echo -e "${BLUE}Home directory:${NC}"
-    for link in "${!home_links[@]}"; do
-        local target="${home_links[$link]}"
+    for i in "${!home_targets[@]}"; do
+        local target="${home_targets[$i]}"
+        local link="${home_links[$i]}"
         execute_command "  $(basename "$link") -> $target" "create_symlink '$target' '$link'"
     done
 
     # ~/.claude directory symlinks
     mkdir -p "$HOME/.claude"
 
-    local -A claude_links=(
-        ["$HOME/.claude/agents"]="$HOME/Dropbox/Config/home/.claude/agents"
-        ["$HOME/.claude/CLAUDE.md"]="$HOME/Dropbox/Config/home/.claude/CLAUDE.md"
-        ["$HOME/.claude/settings.json"]="$HOME/Dropbox/Config/home/.claude/settings.json"
+    local claude_targets=(
+        "$HOME/Dropbox/Config/home/.claude/agents"
+        "$HOME/Dropbox/Config/home/.claude/CLAUDE.md"
+        "$HOME/Dropbox/Config/home/.claude/settings.json"
+    )
+    local claude_links=(
+        "$HOME/.claude/agents"
+        "$HOME/.claude/CLAUDE.md"
+        "$HOME/.claude/settings.json"
     )
 
     echo -e "\n${BLUE}Claude Code config:${NC}"
-    for link in "${!claude_links[@]}"; do
-        local target="${claude_links[$link]}"
+    for i in "${!claude_targets[@]}"; do
+        local target="${claude_targets[$i]}"
+        local link="${claude_links[$i]}"
         execute_command "  $(basename "$link") -> $target" "create_symlink '$target' '$link'"
     done
 
     # ~/.oh-my-zsh/custom symlinks
-    local -A omz_links=(
-        ["$HOME/.oh-my-zsh/custom/aliases.zsh"]="$HOME/Dropbox/Mackup/.oh-my-zsh/custom/aliases.zsh"
-        ["$HOME/.oh-my-zsh/custom/functions.zsh"]="$HOME/Dropbox/Mackup/.oh-my-zsh/custom/functions.zsh"
+    local omz_targets=(
+        "$HOME/Dropbox/Mackup/.oh-my-zsh/custom/aliases.zsh"
+        "$HOME/Dropbox/Mackup/.oh-my-zsh/custom/functions.zsh"
+    )
+    local omz_links=(
+        "$HOME/.oh-my-zsh/custom/aliases.zsh"
+        "$HOME/.oh-my-zsh/custom/functions.zsh"
     )
 
     echo -e "\n${BLUE}Oh My Zsh custom:${NC}"
-    for link in "${!omz_links[@]}"; do
-        local target="${omz_links[$link]}"
+    for i in "${!omz_targets[@]}"; do
+        local target="${omz_targets[$i]}"
+        local link="${omz_links[$i]}"
         execute_command "  $(basename "$link") -> $target" "create_symlink '$target' '$link'"
     done
 
@@ -112,7 +136,6 @@ function fix_ssh_permissions {
     if [ -d "$HOME/.ssh" ]; then
         execute_command "Set ~/.ssh directory permissions to 700" "chmod 700 '$HOME/.ssh'"
 
-        # Fix permissions on all private keys (files without .pub extension)
         for key_file in "$HOME"/.ssh/*; do
             if [ -f "$key_file" ]; then
                 case "$key_file" in

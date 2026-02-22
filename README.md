@@ -20,25 +20,36 @@ Then choose how you want to run it:
 
 ### Option A: Interactive Menu
 
+You can run each phase directly:
+
 ```bash
-./start.sh
+./backup.sh    # Pre-format: backup files, configs, check git changes
+./setup.sh     # Post-format: install software, apply settings, restore configs
 ```
 
-This launches a menu-driven interface with all available operations:
+Or use the combined entry point that lets you pick:
+
+```bash
+./start.sh     # Choose between Backup and Setup
+```
+
+#### Backup menu (`./backup.sh`)
 
 ```
-Before - Preparing your Mac to be formatted:
 1. Files Backup          — Back up Downloads/Pictures to external drive
 2. Config Backup         — Back up configs (stub)
 3. Git Changes Check     — Scan for uncommitted git changes
 4. Ready to Format       — Pre-format validation (stub)
+5. Exit
+```
 
-After - Start your clean Mac setup:
-5. Software              — Install Xcode CLT, Homebrew, Brewfile, NVM, Node.js, iTerm2, Oh My Zsh, Claude Code, Gemini CLI
-6. Settings              — Apply 70+ macOS system preferences
-7. Final Setup           — Dropbox config restore, symlinks, SSH permissions
+#### Setup menu (`./setup.sh`)
 
-8. Exit
+```
+1. Software              — Install Xcode CLT, Homebrew, Brewfile, NVM, Node.js, iTerm2, Oh My Zsh, Claude Code, Gemini CLI
+2. Settings              — Apply 70+ macOS system preferences
+3. Final Setup           — Dropbox config restore, symlinks, SSH permissions
+4. Exit
 ```
 
 > Items marked "stub" have placeholder scripts. For full coverage of those steps, use Claude Code (Option B).
@@ -115,7 +126,9 @@ Edit the `Brewfile` to add or remove packages before running the setup.
 ## Project Structure
 
 ```
-start.sh                          # Entry point — interactive menu
+start.sh                          # Combined entry point — choose Backup or Setup
+backup.sh                         # Pre-format menu — backup files, configs, git check
+setup.sh                          # Post-format menu — software, settings, final setup
 Brewfile                          # Declarative Homebrew manifest
 ├── scripts/common.sh             # Shared utilities (colors, sudo, execute_command)
 ├── scripts/before/

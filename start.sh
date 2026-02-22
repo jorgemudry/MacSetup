@@ -29,8 +29,8 @@ function display_menu {
     echo "4. Ready to format"
     echo
     echo -e "\033[1mAfter - Start your clean Mac setup:\033[0m"
-    echo "5. Settings"
-    echo "6. Software"
+    echo "5. Software"
+    echo "6. Settings"
     echo "7. Final Setup"
     echo
     echo "8. Exit"
@@ -47,8 +47,8 @@ while true; do
         2) bash scripts/before/config_backup.sh ;;
         3) bash scripts/before/git_check.sh ;;
         4) bash scripts/before/ready_format.sh ;;
-        5) bash scripts/after/settings.sh ;;
-        6) bash scripts/after/software.sh ;;
+        5) bash scripts/after/software.sh ;;
+        6) bash scripts/after/settings.sh ;;
         7) bash scripts/after/final_setup.sh ;;
         8)
             echo -e "\n\033[32mGoodbye! 👋\033[0m\n"

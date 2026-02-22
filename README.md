@@ -34,8 +34,8 @@ Before - Preparing your Mac to be formatted:
 4. Ready to Format       — Pre-format validation (stub)
 
 After - Start your clean Mac setup:
-5. Settings              — Apply 70+ macOS system preferences
-6. Software              — Install Xcode CLT, Homebrew, Brewfile, NVM, Node.js, iTerm2, Oh My Zsh, Claude Code, Gemini CLI
+5. Software              — Install Xcode CLT, Homebrew, Brewfile, NVM, Node.js, iTerm2, Oh My Zsh, Claude Code, Gemini CLI
+6. Settings              — Apply 70+ macOS system preferences
 7. Final Setup           — Dropbox config restore, symlinks, SSH permissions
 
 8. Exit

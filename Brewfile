@@ -1,6 +1,4 @@
 # TAPS (Homebrew sources / repositories)
-tap "homebrew/core"
-tap "homebrew/cask"
 tap "buo/cask-upgrade"
 
 ###############################################################################

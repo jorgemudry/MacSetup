@@ -66,7 +66,7 @@ function install_brew_bundle {
     echo -e "\n${BLUE}=== Brew Bundle ===${NC}"
 
     local brewfile_path
-    brewfile_path="$(dirname "$0")/../../Brewfile"
+    brewfile_path="$(cd "$(dirname "${BASH_SOURCE[0]}")/../.." && pwd)/Brewfile"
 
     if [ ! -f "$brewfile_path" ]; then
         echo -e "${RED}Brewfile not found at: $brewfile_path${NC}"
@@ -84,7 +84,7 @@ function install_brew_bundle {
 }
 
 function setup_iterm {
-    echo -e "\n${BLUE}=== Setting iTemr2 Basic Config ===${NC}"
+    echo -e "\n${BLUE}=== Setting iTerm2 Basic Config ===${NC}"
 
     # Don’t display the annoying prompt when quitting iTerm
     execute_command "Disable quit prompt in iTerm" "defaults write com.googlecode.iterm2 PromptOnQuit -bool false"
@@ -115,7 +115,7 @@ function install_oh_my_zsh {
 #    fi
 
     if [ ! -d "$HOME/.oh-my-zsh" ]; then
-        execute_command "Installing Oh My ZSH" "sh -c \"$(curl -fsSL https://raw.githubusercontent.com/ohmyzsh/ohmyzsh/master/tools/install.sh)\""
+        execute_command "Installing Oh My ZSH" "RUNZSH=no CHSH=no sh -c \"\$(curl -fsSL https://raw.githubusercontent.com/ohmyzsh/ohmyzsh/master/tools/install.sh)\""
     else
         echo -e "${GREEN}Oh My ZSH is already installed ✓${NC}"
     fi
@@ -169,5 +169,7 @@ fi
 
 # Keep-alive: update existing `sudo` time stamp
 while true; do sudo -n true; sleep 60; kill -0 "$$" || exit; done 2>/dev/null &
+SUDO_PID=$!
+trap "kill $SUDO_PID 2>/dev/null" EXIT
 
 main_software_flow

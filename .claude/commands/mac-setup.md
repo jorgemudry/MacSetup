@@ -7,20 +7,21 @@ allowed-tools: Bash, Read, Glob, Grep
 
 You are guiding the user through setting up a freshly formatted Mac. Work through each phase interactively, confirming with the user before proceeding to the next.
 
-**Important**: Several steps require `sudo`. Before running any scripts, verify sudo is available:
+**Important**: Several steps require `sudo`. Before running any scripts, verify passwordless sudo is available:
 
 ```bash
 sudo -n true 2>/dev/null && echo "sudo OK" || echo "sudo NOT active"
 ```
 
 If sudo is NOT active, tell the user:
-> "This setup requires sudo. Please exit Claude Code (type `/exit` or press Ctrl+C), run `sudo -v` in your terminal, enter your password, then start Claude Code again and re-run `/mac-setup`."
+> "This setup requires passwordless sudo. Please exit Claude Code and run these commands in your terminal:
+> ```
+> sudo -v
+> echo \"$(whoami) ALL=(ALL) NOPASSWD: ALL\" | sudo tee /etc/sudoers.d/macsetup-temp
+> ```
+> Then start Claude Code again and re-run `/mac-setup`. The temporary sudo rule will be removed at the end of the setup."
 
-Do NOT proceed until `sudo -n true` succeeds. Once confirmed, start a keep-alive loop:
-
-```bash
-while true; do sudo -n true; sleep 50; kill -0 $$ || exit; done 2>/dev/null &
-```
+Do NOT proceed until `sudo -n true` succeeds.
 
 All scripts must be called with `MACSETUP_NONINTERACTIVE=true` so they skip interactive prompts (password, press-any-key, reboot) that would hang in Claude Code.
 
@@ -124,6 +125,20 @@ Ask the user if they need any of these:
 - **Terminal theme**: Import iTerm2 color scheme or configure terminal preferences
 - **Fonts**: Verify Nerd Fonts or other development fonts are installed
 
+## Post-Setup Cleanup
+
+Remove the temporary passwordless sudo rule that was created before launching Claude Code:
+
+```bash
+sudo rm -f /etc/sudoers.d/macsetup-temp
+```
+
+Verify it was removed:
+
+```bash
+sudo -n true 2>/dev/null && echo "WARNING: sudo still passwordless" || echo "sudo rule removed OK"
+```
+
 ## Post-Setup Summary
 
 After all phases are complete, provide a summary:
@@ -131,4 +146,5 @@ After all phases are complete, provide a summary:
 - System settings applied
 - SSH key configured (yes/no)
 - Git configured (yes/no)
+- Temporary sudo rule removed (yes/no)
 - Any remaining manual steps the user should do (e.g., sign in to apps, set up cloud storage, configure IDE)

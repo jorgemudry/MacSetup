@@ -62,12 +62,20 @@ Two custom skills are included in this repo:
    ```bash
    curl -fsSL https://claude.ai/install.sh | bash
    ```
-2. Download this repo (see [Quick Start](#quick-start) above), then:
+2. Download this repo (see [Quick Start](#quick-start) above)
+3. Enable temporary passwordless sudo (required because Claude Code can't handle interactive password prompts):
+   ```bash
+   sudo -v
+   echo "$(whoami) ALL=(ALL) NOPASSWD: ALL" | sudo tee /etc/sudoers.d/macsetup-temp
+   ```
+4. Launch Claude Code and run the setup:
    ```bash
    cd ~/MacSetup
    claude
    ```
-3. Once inside Claude Code, type `/mac-backup` or `/mac-setup` to start
+5. Once inside Claude Code, type `/mac-backup` or `/mac-setup` to start
+
+> The temporary sudo rule is automatically removed at the end of the setup. If you exit early, remove it manually: `sudo rm /etc/sudoers.d/macsetup-temp`
 
 > After running `/mac-setup`, Claude Code will also be installed as a cask from the Brewfile for future use.
 

@@ -140,6 +140,50 @@ function install_oh_my_zsh {
     fi
 }
 
+function install_nvm_and_node {
+    echo -e "\n${BLUE}=== NVM & Node.js ===${NC}"
+
+    if [ -s "$HOME/.nvm/nvm.sh" ]; then
+        echo -e "${GREEN}NVM is already installed ✓${NC}"
+    else
+        execute_command "Installing NVM" "curl -o- https://raw.githubusercontent.com/nvm-sh/nvm/v0.40.4/install.sh | bash"
+    fi
+
+    # Load nvm into current shell
+    export NVM_DIR="$HOME/.nvm"
+    \. "$NVM_DIR/nvm.sh"
+
+    if command -v node &>/dev/null; then
+        echo -e "${GREEN}Node.js $(node --version) is already installed ✓${NC}"
+    else
+        execute_command "Installing Node.js 24 via NVM" "nvm install 24" true
+    fi
+}
+
+function install_claude_code {
+    echo -e "\n${BLUE}=== Claude Code ===${NC}"
+
+    if command -v claude &>/dev/null; then
+        echo -e "${GREEN}Claude Code is already installed ✓${NC}"
+    else
+        execute_command "Installing Claude Code" "curl -fsSL https://claude.ai/install.sh | bash" true
+    fi
+}
+
+function install_gemini_cli {
+    echo -e "\n${BLUE}=== Gemini CLI ===${NC}"
+
+    if command -v gemini &>/dev/null; then
+        echo -e "${GREEN}Gemini CLI is already installed ✓${NC}"
+    else
+        # Ensure nvm/node is loaded
+        if [ -s "$HOME/.nvm/nvm.sh" ]; then
+            \. "$HOME/.nvm/nvm.sh"
+        fi
+        execute_command "Installing Gemini CLI" "npm install -g @google/gemini-cli" true
+    fi
+}
+
 function main_software_flow {
     install_xcode_clt
     install_homebrew
@@ -175,6 +219,9 @@ function main_software_flow {
 
     setup_iterm
     install_oh_my_zsh
+    install_nvm_and_node
+    install_claude_code
+    install_gemini_cli
 
     echo -e "\n${GREEN}Software installation complete!${NC}"
     press_any_key

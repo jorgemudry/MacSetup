@@ -101,7 +101,7 @@ The `Brewfile` is a declarative manifest used by `brew bundle` to install everyt
 - **Communication** — Discord, Slack, Telegram, WhatsApp
 - **Development** — iTerm2, VS Code, Sublime Text, OrbStack, TablePlus, Sequel Ace, Postman
 - **Productivity** — Alfred, Rectangle, Notion, Dropbox
-- **AI** — Claude, Claude Code, ChatGPT, Gemini CLI
+- **AI** — Claude, ChatGPT (Claude Code and Gemini CLI are installed separately via their own installers)
 - **Multimedia** — Spotify, VLC, ffmpeg, yt-dlp
 - **Mac App Store** — OneNote, The Unarchiver, WireGuard, Stockfish
 

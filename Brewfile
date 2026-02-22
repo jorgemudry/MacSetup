@@ -138,9 +138,7 @@ cask "vlc"
 
 # 6) AI
 cask "claude"                   # Anthropic's official Claude AI desktop app
-cask "claude-code"              # Terminal-based AI coding assistant
 cask "chatgpt"                  # OpenAI's official ChatGPT desktop app
-brew "gemini-cli"               # Interact with Google Gemini AI models from the command-line
 
 ###############################################################################
 # MAS (Mac App Store apps)

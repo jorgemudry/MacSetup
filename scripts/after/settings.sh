@@ -7,9 +7,10 @@ fi
 source ./scripts/common.sh
 
 function housekeeping {
-    # Close any open System Preferences panes, to prevent them from overriding
+    # Close any open System Settings/Preferences panes, to prevent them from overriding
     # settings we’re about to change
-    osascript -e 'tell application "System Preferences" to quit'
+    osascript -e ‘tell application "System Settings" to quit’ 2>/dev/null
+    osascript -e ‘tell application "System Preferences" to quit’ 2>/dev/null
 }
 
 function naming_things {
@@ -18,10 +19,10 @@ function naming_things {
     echo -ne "${BLUE}What should your computer be named? (default: ${COMPUTERNAME}): ${NC}"
     read -r
     [ -n "$REPLY" ] && COMPUTERNAME=$REPLY
-    execute_command "Set computer name" "sudo scutil --set ComputerName ${COMPUTERNAME}"
-    execute_command "Set hostname" "sudo scutil --set HostName ${COMPUTERNAME}"
-    execute_command "Set localhost name" "sudo scutil --set LocalHostName ${COMPUTERNAME}"
-    execute_command "Set NetBIOSName name" "sudo defaults write /Library/Preferences/SystemConfiguration/com.apple.smb.server NetBIOSName -string ${COMPUTERNAME}"
+    execute_command "Set computer name" "sudo scutil --set ComputerName '${COMPUTERNAME}'"
+    execute_command "Set hostname" "sudo scutil --set HostName '${COMPUTERNAME}'"
+    execute_command "Set localhost name" "sudo scutil --set LocalHostName '${COMPUTERNAME}'"
+    execute_command "Set NetBIOSName name" "sudo defaults write /Library/Preferences/SystemConfiguration/com.apple.smb.server NetBIOSName -string '${COMPUTERNAME}'"
 
     if defaults read NSGlobalDomain AppleID 2>&1 | grep -qE "( does not exist)$"; then
         AppleID=""
@@ -112,6 +113,11 @@ function general_uiux {
 
 function touchbar {
     echo -e "\n${BLUE}=== Touch Bar ===${NC}"
+    # Skip on Apple Silicon — no arm64 Mac has a Touch Bar
+    if [[ "$(uname -m)" == "arm64" ]]; then
+        echo -e "${YELLOW}Skipping Touch Bar settings (not available on Apple Silicon)${NC}"
+        return 0
+    fi
     execute_command "Always display full control strip (ignoring App Controls)" "defaults write com.apple.touchbar.agent PresentationModeGlobal fullControlStrip"
 }
 
@@ -148,6 +154,7 @@ function trackpad_input {
     execute_command "Set Mouse Springing delay" "defaults write NSGlobalDomain com.apple.springing.delay -float 0.25"
 
     # Increase sound quality for Bluetooth headphones/headsets
+    # NOTE: May not work on macOS Sonoma+
     execute_command "Increase Bluetooth audio quality" "defaults write com.apple.BluetoothAudioAgent 'Apple Bitpool Min (editable)' -int 40"
 
     # Enable full keyboard access for all controls (e.g. enable Tab in modal dialogs)
@@ -181,6 +188,7 @@ function trackpad_input {
 function screen_settings {
     echo -e "\n${BLUE}=== Screen Settings ===${NC}"
     # Require password immediately after sleep or screen saver begins
+    # NOTE: May not work on macOS Sonoma+
     execute_command "Require password after sleep or screensaver" "defaults write com.apple.screensaver askForPassword -int 1"
     execute_command "Set screensaver password delay to 0 seconds" "defaults write com.apple.screensaver askForPasswordDelay -int 0"
 
@@ -262,9 +270,6 @@ function finder_settings {
     # Disable the warning before emptying the Trash
     execute_command "Disable warning before emptying Trash" "defaults write com.apple.finder WarnOnEmptyTrash -bool false"
 
-    # Empty Trash securely by default
-    execute_command "Enable secure emptying of Trash" "defaults write com.apple.finder EmptyTrashSecurely -bool true"
-
     # Enable AirDrop over Ethernet and on unsupported Macs running Lion
     execute_command "Enable AirDrop over Ethernet and unsupported Macs" "defaults write com.apple.NetworkBrowser BrowseAllInterfaces -bool true"
 
@@ -313,9 +318,6 @@ function dock_settings {
     # Don’t group windows by application in Mission Control
     execute_command "Disable window grouping in Mission Control" "defaults write com.apple.dock expose-group-by-app -bool false"
 
-    # Set Mission Control as a separate space
-    execute_command "Enable Mission Control as a separate space" "defaults write com.apple.dashboard 'dashboard-enabled-state' 2"
-
     # Don’t automatically rearrange Spaces based on most recent use
     execute_command "Disable automatic rearranging of Spaces" "defaults write com.apple.dock mru-spaces -bool false"
 
@@ -357,9 +359,6 @@ function activity_monitor {
 
     # Show all processes in Activity Monitor
     execute_command "Show all processes in Activity Monitor" "defaults write com.apple.ActivityMonitor ShowCategory -int 0"
-
-    # Show all processes (alternative setting)
-    execute_command "Ensure all processes are displayed" "defaults write com.apple.ActivityMonitor ShowCategory -int 100"
 
     # Show Data in the Disk graph (instead of IO)
     execute_command "Show Data in Disk graph instead of IO" "defaults write com.apple.ActivityMonitor DiskGraphType -int 1"
@@ -412,7 +411,7 @@ function appstore {
 
 function photos {
     echo -e "\n${BLUE}=== Photos ===${NC}"
-    execute_command "Disable iPhoto auto-launch" "defaults -currentHost write com.apple.ImageCapture disableHotPlug -bool true"
+    execute_command "Disable Photos auto-launch when device is plugged in" "defaults -currentHost write com.apple.ImageCapture disableHotPlug -bool true"
 }
 
 function kill_affected_applications {
@@ -436,6 +435,11 @@ if ! check_sudo; then
     press_any_key
     exit 0
 fi
+
+# Keep-alive: update existing `sudo` time stamp
+while true; do sudo -n true; sleep 60; kill -0 "$$" || exit; done 2>/dev/null &
+SUDO_PID=$!
+trap "kill $SUDO_PID 2>/dev/null" EXIT
 
 housekeeping
 naming_things

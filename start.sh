@@ -1,7 +1,11 @@
 #!/usr/bin/env bash
 
+SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
+export SCRIPT_DIR
+cd "$SCRIPT_DIR"
+
 export MACSETUP_MAIN=true
-source ./scripts/common.sh
+source "$SCRIPT_DIR/scripts/common.sh"
 
 # ASCII Header
 function show_header {

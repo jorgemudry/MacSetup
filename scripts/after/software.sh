@@ -1,6 +1,6 @@
 #!/usr/bin/env bash
 
-if [ "$MACSETUP_MAIN" != "true" ]; then
+if [ "${MACSETUP_MAIN:-}" != "true" ]; then
     echo "This script must be run from start.sh!"
     exit 1
 fi
@@ -12,13 +12,26 @@ function install_xcode_clt {
     if xcode-select -p &>/dev/null; then
         execute_command "Xcode CLT already installed" "true"
     else
-        execute_command "Requesting Xcode CLT installation" "xcode-select --install"
+        if [[ "${MACSETUP_NONINTERACTIVE:-}" == "true" ]]; then
+            # Non-interactive: use softwareupdate instead of GUI dialog
+            echo -e "${YELLOW}Installing Xcode CLT via softwareupdate...${NC}"
+            local clt_label
+            clt_label=$(softwareupdate -l 2>&1 | grep -o '.*Command Line Tools.*' | head -1 | sed 's/^[* ]*//' | sed 's/ *$//')
+            if [ -n "$clt_label" ]; then
+                execute_command "Installing Xcode CLT" "softwareupdate -i '${clt_label}' --agree-to-license" true
+            else
+                echo -e "${RED}Could not find Xcode CLT in software updates.${NC}"
+                return 1
+            fi
+        else
+            execute_command "Requesting Xcode CLT installation" "xcode-select --install"
 
-        echo -e "\n${YELLOW}Waiting for Xcode CLT installation to complete..."
-        until xcode-select -p &>/dev/null; do
-            sleep 5
-        done
-        echo -e "${GREEN}Xcode CLT installation complete!${NC}"
+            echo -e "\n${YELLOW}Waiting for Xcode CLT installation to complete..."
+            until xcode-select -p &>/dev/null; do
+                sleep 5
+            done
+            echo -e "${GREEN}Xcode CLT installation complete!${NC}"
+        fi
     fi
 }
 
@@ -30,7 +43,13 @@ function install_homebrew {
         return 0
     fi
 
-    if /bin/bash -c "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/HEAD/install.sh)"; then
+    local brew_cmd
+    brew_cmd="$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/HEAD/install.sh)"
+    if [[ "${MACSETUP_NONINTERACTIVE:-}" == "true" ]]; then
+        export NONINTERACTIVE=1
+    fi
+
+    if /bin/bash -c "$brew_cmd"; then
         if [[ "$(uname -m)" == "arm64" ]]; then
             eval "$(/opt/homebrew/bin/brew shellenv)"
         else

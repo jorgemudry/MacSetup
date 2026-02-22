@@ -1,6 +1,6 @@
 #!/usr/bin/env bash
 
-if [ "$MACSETUP_MAIN" != "true" ]; then
+if [ "${MACSETUP_MAIN:-}" != "true" ]; then
     echo "This script must be run from start.sh!"
     exit 1
 fi
@@ -83,8 +83,7 @@ function do_files_backup {
     done
 
     echo -e "${GREEN}Backup completed!${NC}\n" | tee -a "$backup_log"
-    echo -ne "${BLUE}Press any key to continue...${NC}"
-    read -n1 -s
+    press_any_key
 }
 
 while true; do

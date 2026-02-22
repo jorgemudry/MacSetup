@@ -1,6 +1,6 @@
 #!/usr/bin/env bash
 
-if [ "$MACSETUP_MAIN" != "true" ]; then
+if [ "${MACSETUP_MAIN:-}" != "true" ]; then
     echo "This script must be run from start.sh!"
     exit 1
 fi
@@ -16,9 +16,17 @@ function housekeeping {
 function naming_things {
     echo -e "\n${BLUE}=== Naming Things ===${NC}"
     COMPUTERNAME="$(hostname)"
-    echo -ne "${BLUE}What should your computer be named? (default: ${COMPUTERNAME}): ${NC}"
-    read -r
-    [ -n "$REPLY" ] && COMPUTERNAME=$REPLY
+    if [[ "${MACSETUP_NONINTERACTIVE:-}" != "true" ]]; then
+        echo -ne "${BLUE}What should your computer be named? (default: ${COMPUTERNAME}): ${NC}"
+        read -r
+        if [[ -n "$REPLY" ]]; then
+            if [[ "$REPLY" =~ ^[a-zA-Z0-9._-]+$ ]]; then
+                COMPUTERNAME=$REPLY
+            else
+                echo -e "${RED}Invalid name. Use only letters, numbers, dots, hyphens, and underscores.${NC}"
+            fi
+        fi
+    fi
     execute_command "Set computer name" "sudo scutil --set ComputerName '${COMPUTERNAME}'"
     execute_command "Set hostname" "sudo scutil --set HostName '${COMPUTERNAME}'"
     execute_command "Set localhost name" "sudo scutil --set LocalHostName '${COMPUTERNAME}'"
@@ -28,12 +36,16 @@ function naming_things {
         AppleID=""
     else
         AppleID="$(defaults read NSGlobalDomain AppleID)"
-    fi;
-    echo -ne "${BLUE}What's your Apple ID? (default: $AppleID): ${NC}"
-    read -r
-    [ -n "$REPLY" ] && AppleID=$REPLY
+    fi
+    if [[ "${MACSETUP_NONINTERACTIVE:-}" != "true" ]]; then
+        echo -ne "${BLUE}What's your Apple ID? (default: $AppleID): ${NC}"
+        read -r
+        [ -n "$REPLY" ] && AppleID=$REPLY
+    fi
 
-    execute_command "Set AppleID" "defaults write NSGlobalDomain AppleID -string '${AppleID}'"
+    if [ -n "$AppleID" ]; then
+        execute_command "Set AppleID" "defaults write NSGlobalDomain AppleID -string '${AppleID}'"
+    fi
 }
 
 function date_time {

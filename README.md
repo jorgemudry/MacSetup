@@ -58,24 +58,16 @@ Two custom skills are included in this repo:
 
 **On a fresh Mac** (nothing installed yet):
 
-1. Install Node.js — download the macOS installer from [nodejs.org](https://nodejs.org/) (LTS recommended)
-2. Install Claude Code:
+1. Install Claude Code:
    ```bash
-   npm install -g @anthropic-ai/claude-code
+   curl -fsSL https://claude.ai/install.sh | bash
    ```
-3. Download this repo (see [Quick Start](#quick-start) above), then:
+2. Download this repo (see [Quick Start](#quick-start) above), then:
    ```bash
    cd ~/MacSetup
    claude
    ```
-4. Once inside Claude Code, type `/mac-backup` or `/mac-setup` to start
-
-**On a Mac with Homebrew already installed:**
-
-```bash
-brew install node
-npm install -g @anthropic-ai/claude-code
-```
+3. Once inside Claude Code, type `/mac-backup` or `/mac-setup` to start
 
 > After running `/mac-setup`, Claude Code will also be installed as a cask from the Brewfile for future use.
 

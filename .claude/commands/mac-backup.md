@@ -7,6 +7,28 @@ allowed-tools: Bash, Read, Glob, Grep
 
 You are guiding the user through backing up their Mac before a format/reinstall. Work through each phase interactively, confirming with the user before proceeding to the next.
 
+**Important**: Some steps (e.g. Wi-Fi password retrieval) require `sudo`. Before running any sudo commands, verify passwordless sudo is available:
+
+```bash
+sudo -n true 2>/dev/null && echo "sudo OK" || echo "sudo NOT active"
+```
+
+If sudo is NOT active, tell the user:
+> "This step requires passwordless sudo. Please exit Claude Code and run these commands in your terminal:
+> ```
+> sudo -v
+> echo \"$(whoami) ALL=(ALL) NOPASSWD: ALL\" | sudo tee /etc/sudoers.d/macsetup-temp
+> ```
+> Then start Claude Code again and re-run `/mac-backup`. The temporary sudo rule will be removed at the end."
+
+Do NOT run any `sudo` command until `sudo -n true` succeeds.
+
+At the end of the backup process, remove the temporary sudo rule:
+
+```bash
+sudo rm -f /etc/sudoers.d/macsetup-temp
+```
+
 ## Phase 1: File Backup
 
 Help the user back up important files to an external drive or network location.

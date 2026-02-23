@@ -1,6 +1,6 @@
 #!/usr/bin/env bash
 
-if [ "$MACSETUP_MAIN" != "true" ]; then
+if [ "${MACSETUP_MAIN:-}" != "true" ]; then
     echo "This script must be run from start.sh!"
     exit 1
 fi

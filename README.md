@@ -3,7 +3,7 @@
 Automated macOS setup and provisioning framework. Handles two phases of Mac provisioning:
 
 - **Before formatting** — back up files, export configs, check for uncommitted git changes
-- **After formatting** — install software via Homebrew, apply system preferences, configure dev environment
+- **After formatting** — install software via Homebrew, apply system preferences, restore configs from Dropbox
 
 ## Quick Start
 
@@ -20,25 +20,36 @@ Then choose how you want to run it:
 
 ### Option A: Interactive Menu
 
+You can run each phase directly:
+
 ```bash
-./start.sh
+./backup.sh    # Pre-format: backup files, configs, check git changes
+./setup.sh     # Post-format: install software, apply settings, restore configs
 ```
 
-This launches a menu-driven interface with all available operations:
+Or use the combined entry point that lets you pick:
+
+```bash
+./start.sh     # Choose between Backup and Setup
+```
+
+#### Backup menu (`./backup.sh`)
 
 ```
-Before - Preparing your Mac to be formatted:
 1. Files Backup          — Back up Downloads/Pictures to external drive
 2. Config Backup         — Back up configs (stub)
 3. Git Changes Check     — Scan for uncommitted git changes
 4. Ready to Format       — Pre-format validation (stub)
+5. Exit
+```
 
-After - Start your clean Mac setup:
-5. Settings              — Apply 70+ macOS system preferences
-6. Software              — Install Xcode CLT, Homebrew, Brewfile, iTerm2, Oh My Zsh
-7. Final Setup           — Post-install configuration (stub)
+#### Setup menu (`./setup.sh`)
 
-8. Exit
+```
+1. Software              — Install Xcode CLT, Homebrew, Brewfile, NVM, Node.js, iTerm2, Oh My Zsh, Claude Code, Gemini CLI
+2. Settings              — Apply 70+ macOS system preferences
+3. Final Setup           — Dropbox config restore, symlinks, SSH permissions
+4. Exit
 ```
 
 > Items marked "stub" have placeholder scripts. For full coverage of those steps, use Claude Code (Option B).
@@ -52,32 +63,30 @@ Two custom skills are included in this repo:
 | Skill | Description |
 |-------|-------------|
 | `/mac-backup` | Full pre-format workflow: file backup, config export, git check, readiness checklist |
-| `/mac-setup` | Full post-format workflow: software install, system settings, SSH/git config, restore |
+| `/mac-setup` | Full post-format workflow: software install, system settings, Dropbox config restore |
 
 #### Installing Claude Code
 
 **On a fresh Mac** (nothing installed yet):
 
-1. Install Node.js — download the macOS installer from [nodejs.org](https://nodejs.org/) (LTS recommended)
-2. Install Claude Code:
+1. Install Claude Code:
    ```bash
-   npm install -g @anthropic-ai/claude-code
+   curl -fsSL https://claude.ai/install.sh | bash
    ```
-3. Download this repo (see [Quick Start](#quick-start) above), then:
+2. Download this repo (see [Quick Start](#quick-start) above)
+3. Enable temporary passwordless sudo (required because Claude Code can't handle interactive password prompts):
+   ```bash
+   sudo -v
+   echo "$(whoami) ALL=(ALL) NOPASSWD: ALL" | sudo tee /etc/sudoers.d/macsetup-temp
+   ```
+4. Launch Claude Code and run the setup:
    ```bash
    cd ~/MacSetup
    claude
    ```
-4. Once inside Claude Code, type `/mac-backup` or `/mac-setup` to start
+5. Once inside Claude Code, type `/mac-backup` or `/mac-setup` to start
 
-**On a Mac with Homebrew already installed:**
-
-```bash
-brew install node
-npm install -g @anthropic-ai/claude-code
-```
-
-> After running `/mac-setup`, Claude Code will also be installed as a cask from the Brewfile for future use.
+> The temporary sudo rule is automatically removed at the end of the setup. If you exit early, remove it manually: `sudo rm /etc/sudoers.d/macsetup-temp`
 
 #### Using the skills
 
@@ -101,16 +110,25 @@ The `Brewfile` is a declarative manifest used by `brew bundle` to install everyt
 - **Communication** — Discord, Slack, Telegram, WhatsApp
 - **Development** — iTerm2, VS Code, Sublime Text, OrbStack, TablePlus, Sequel Ace, Postman
 - **Productivity** — Alfred, Rectangle, Notion, Dropbox
-- **AI** — Claude, Claude Code, ChatGPT, Gemini CLI
+- **AI** — Claude, ChatGPT
 - **Multimedia** — Spotify, VLC, ffmpeg, yt-dlp
 - **Mac App Store** — OneNote, The Unarchiver, WireGuard, Stockfish
+
+The following are installed separately by `software.sh` (not via Brewfile):
+
+- **NVM** — Node Version Manager (v0.40.4)
+- **Node.js** — v24 via NVM
+- **Claude Code** — via official installer (`claude.ai/install.sh`)
+- **Gemini CLI** — via npm (`@google/gemini-cli`)
 
 Edit the `Brewfile` to add or remove packages before running the setup.
 
 ## Project Structure
 
 ```
-start.sh                          # Entry point — interactive menu
+start.sh                          # Combined entry point — choose Backup or Setup
+backup.sh                         # Pre-format menu — backup files, configs, git check
+setup.sh                          # Post-format menu — software, settings, final setup
 Brewfile                          # Declarative Homebrew manifest
 ├── scripts/common.sh             # Shared utilities (colors, sudo, execute_command)
 ├── scripts/before/
@@ -120,8 +138,8 @@ Brewfile                          # Declarative Homebrew manifest
 │   └── ready_format.sh           # Pre-format validation (stub)
 ├── scripts/after/
 │   ├── settings.sh               # Apply 70+ macOS defaults (UI, Finder, Dock, etc.)
-│   ├── software.sh               # Install Xcode CLT, Homebrew, Brewfile, iTerm2, Oh My Zsh
-│   └── final_setup.sh            # Final configuration (stub)
+│   ├── software.sh               # Install Xcode CLT, Homebrew, Brewfile, NVM, Node.js, iTerm2, Oh My Zsh, Claude Code, Gemini CLI
+│   └── final_setup.sh            # Dropbox config restore, symlinks, SSH permissions
 └── .claude/commands/
     ├── mac-backup.md             # /mac-backup skill for Claude Code
     └── mac-setup.md              # /mac-setup skill for Claude Code

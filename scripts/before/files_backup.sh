@@ -1,15 +1,11 @@
 #!/usr/bin/env bash
 
-if [ "$MACSETUP_MAIN" != "true" ]; then
+if [ "${MACSETUP_MAIN:-}" != "true" ]; then
     echo "This script must be run from start.sh!"
     exit 1
 fi
 
-RED='\033[0;31m'
-GREEN='\033[0;32m'
-YELLOW='\033[1;33m'
-BLUE='\033[0;34m'
-NC='\033[0m' # No Color
+source ./scripts/common.sh
 
 function show_files_backup_header {
     clear
@@ -87,8 +83,7 @@ function do_files_backup {
     done
 
     echo -e "${GREEN}Backup completed!${NC}\n" | tee -a "$backup_log"
-    echo -ne "${BLUE}Press any key to continue...${NC}"
-    read -n1 -s
+    press_any_key
 }
 
 while true; do
@@ -121,6 +116,12 @@ while true; do
     echo
     echo -ne "${BLUE}Enter your choice: ${NC}"
     read -r choice
+
+    if ! [[ "$choice" =~ ^[0-9]+$ ]]; then
+        echo -e "${RED}Invalid option!${NC}"
+        sleep 1
+        continue
+    fi
 
     index=$(( choice - 1 ))
     if [ $index -lt 0 ] || [ $index -ge ${#optionDest[@]} ]; then

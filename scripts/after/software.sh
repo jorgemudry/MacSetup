@@ -1,6 +1,6 @@
 #!/usr/bin/env bash
 
-if [ "$MACSETUP_MAIN" != "true" ]; then
+if [ "${MACSETUP_MAIN:-}" != "true" ]; then
     echo "This script must be run from start.sh!"
     exit 1
 fi
@@ -12,13 +12,26 @@ function install_xcode_clt {
     if xcode-select -p &>/dev/null; then
         execute_command "Xcode CLT already installed" "true"
     else
-        execute_command "Requesting Xcode CLT installation" "xcode-select --install"
+        if [[ "${MACSETUP_NONINTERACTIVE:-}" == "true" ]]; then
+            # Non-interactive: use softwareupdate instead of GUI dialog
+            echo -e "${YELLOW}Installing Xcode CLT via softwareupdate...${NC}"
+            local clt_label
+            clt_label=$(softwareupdate -l 2>&1 | grep -o '.*Command Line Tools.*' | head -1 | sed 's/^[* ]*//' | sed 's/ *$//')
+            if [ -n "$clt_label" ]; then
+                execute_command "Installing Xcode CLT" "softwareupdate -i '${clt_label}' --agree-to-license" true
+            else
+                echo -e "${RED}Could not find Xcode CLT in software updates.${NC}"
+                return 1
+            fi
+        else
+            execute_command "Requesting Xcode CLT installation" "xcode-select --install"
 
-        echo -e "\n${YELLOW}Waiting for Xcode CLT installation to complete..."
-        until xcode-select -p &>/dev/null; do
-            sleep 5
-        done
-        echo -e "${GREEN}Xcode CLT installation complete!${NC}"
+            echo -e "\n${YELLOW}Waiting for Xcode CLT installation to complete..."
+            until xcode-select -p &>/dev/null; do
+                sleep 5
+            done
+            echo -e "${GREEN}Xcode CLT installation complete!${NC}"
+        fi
     fi
 }
 
@@ -30,7 +43,13 @@ function install_homebrew {
         return 0
     fi
 
-    if /bin/bash -c "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/HEAD/install.sh)"; then
+    local brew_cmd
+    brew_cmd="$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/HEAD/install.sh)"
+    if [[ "${MACSETUP_NONINTERACTIVE:-}" == "true" ]]; then
+        export NONINTERACTIVE=1
+    fi
+
+    if /bin/bash -c "$brew_cmd"; then
         if [[ "$(uname -m)" == "arm64" ]]; then
             eval "$(/opt/homebrew/bin/brew shellenv)"
         else
@@ -66,7 +85,7 @@ function install_brew_bundle {
     echo -e "\n${BLUE}=== Brew Bundle ===${NC}"
 
     local brewfile_path
-    brewfile_path="$(dirname "$0")/../../Brewfile"
+    brewfile_path="$(cd "$(dirname "${BASH_SOURCE[0]}")/../.." && pwd)/Brewfile"
 
     if [ ! -f "$brewfile_path" ]; then
         echo -e "${RED}Brewfile not found at: $brewfile_path${NC}"
@@ -84,7 +103,7 @@ function install_brew_bundle {
 }
 
 function setup_iterm {
-    echo -e "\n${BLUE}=== Setting iTemr2 Basic Config ===${NC}"
+    echo -e "\n${BLUE}=== Setting iTerm2 Basic Config ===${NC}"
 
     # Don’t display the annoying prompt when quitting iTerm
     execute_command "Disable quit prompt in iTerm" "defaults write com.googlecode.iterm2 PromptOnQuit -bool false"
@@ -115,9 +134,53 @@ function install_oh_my_zsh {
 #    fi
 
     if [ ! -d "$HOME/.oh-my-zsh" ]; then
-        execute_command "Installing Oh My ZSH" "sh -c \"$(curl -fsSL https://raw.githubusercontent.com/ohmyzsh/ohmyzsh/master/tools/install.sh)\""
+        execute_command "Installing Oh My ZSH" "RUNZSH=no CHSH=no sh -c \"\$(curl -fsSL https://raw.githubusercontent.com/ohmyzsh/ohmyzsh/master/tools/install.sh)\""
     else
         echo -e "${GREEN}Oh My ZSH is already installed ✓${NC}"
+    fi
+}
+
+function install_nvm_and_node {
+    echo -e "\n${BLUE}=== NVM & Node.js ===${NC}"
+
+    if [ -s "$HOME/.nvm/nvm.sh" ]; then
+        echo -e "${GREEN}NVM is already installed ✓${NC}"
+    else
+        execute_command "Installing NVM" "curl -o- https://raw.githubusercontent.com/nvm-sh/nvm/v0.40.4/install.sh | bash"
+    fi
+
+    # Load nvm into current shell
+    export NVM_DIR="$HOME/.nvm"
+    \. "$NVM_DIR/nvm.sh"
+
+    if command -v node &>/dev/null; then
+        echo -e "${GREEN}Node.js $(node --version) is already installed ✓${NC}"
+    else
+        execute_command "Installing Node.js 24 via NVM" "nvm install 24" true
+    fi
+}
+
+function install_claude_code {
+    echo -e "\n${BLUE}=== Claude Code ===${NC}"
+
+    if command -v claude &>/dev/null; then
+        echo -e "${GREEN}Claude Code is already installed ✓${NC}"
+    else
+        execute_command "Installing Claude Code" "curl -fsSL https://claude.ai/install.sh | bash" true
+    fi
+}
+
+function install_gemini_cli {
+    echo -e "\n${BLUE}=== Gemini CLI ===${NC}"
+
+    if command -v gemini &>/dev/null; then
+        echo -e "${GREEN}Gemini CLI is already installed ✓${NC}"
+    else
+        # Ensure nvm/node is loaded
+        if [ -s "$HOME/.nvm/nvm.sh" ]; then
+            \. "$HOME/.nvm/nvm.sh"
+        fi
+        execute_command "Installing Gemini CLI" "npm install -g @google/gemini-cli" true
     fi
 }
 
@@ -156,6 +219,9 @@ function main_software_flow {
 
     setup_iterm
     install_oh_my_zsh
+    install_nvm_and_node
+    install_claude_code
+    install_gemini_cli
 
     echo -e "\n${GREEN}Software installation complete!${NC}"
     press_any_key
@@ -169,5 +235,7 @@ fi
 
 # Keep-alive: update existing `sudo` time stamp
 while true; do sudo -n true; sleep 60; kill -0 "$$" || exit; done 2>/dev/null &
+SUDO_PID=$!
+trap "kill $SUDO_PID 2>/dev/null" EXIT
 
 main_software_flow

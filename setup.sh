@@ -20,25 +20,31 @@ function show_header {
     echo
 }
 
-show_header
+function display_menu {
+    echo -e "\033[1mStart your clean Mac setup:\033[0m"
+    echo "1. Software"
+    echo "2. Settings"
+    echo "3. Final Setup"
+    echo
+    echo "4. Exit"
+}
 
-echo -e "\033[1mWhat would you like to do?\033[0m"
-echo "1. Backup  — Prepare your Mac to be formatted"
-echo "2. Setup   — Start your clean Mac setup"
-echo
-echo "3. Exit"
+while true; do
+    show_header
+    display_menu
+    echo -n -e "\n\033[94mEnter your choice: \033[0m"
+    read -r choice
 
-echo -n -e "\n\033[94mEnter your choice: \033[0m"
-read -r choice
-
-case $choice in
-    1) bash "$SCRIPT_DIR/backup.sh" ;;
-    2) bash "$SCRIPT_DIR/setup.sh" ;;
-    3)
-        echo -e "\n\033[32mGoodbye! 👋\033[0m\n"
-        exit 0
-        ;;
-    *)
-        echo -e "\n\033[31mInvalid option!\033[0m"
-        ;;
-esac
+    case $choice in
+        1) bash scripts/after/software.sh ;;
+        2) bash scripts/after/settings.sh ;;
+        3) bash scripts/after/final_setup.sh ;;
+        4)
+            echo -e "\n\033[32mGoodbye! 👋\033[0m\n"
+            exit 0
+            ;;
+        *)
+            echo -e "\n\033[31mInvalid option!\033[0m"
+            ;;
+    esac
+done

@@ -113,7 +113,6 @@ cask "shottr"               # Screenshot measurement and annotation tool
 cask "provisionql"       # QuickLook for .mobileprovision files
 cask "qlcolorcode"       # QuickLook syntax highlighting
 cask "qlvideo"           # QuickLook plugin for video thumbnails
-cask "quicklook-json"    # QuickLook JSON files
 
 # 4) Development / DevOps
 # cask "dynobase"                       # GUI for DynamoDB
@@ -138,9 +137,7 @@ cask "vlc"
 
 # 6) AI
 cask "claude"                   # Anthropic's official Claude AI desktop app
-cask "claude-code"              # Terminal-based AI coding assistant
 cask "chatgpt"                  # OpenAI's official ChatGPT desktop app
-brew "gemini-cli"               # Interact with Google Gemini AI models from the command-line
 
 ###############################################################################
 # MAS (Mac App Store apps)

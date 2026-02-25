@@ -9,6 +9,7 @@ tap "buo/cask-upgrade"
 
 brew "bat"               # Improved 'cat' with syntax highlighting (https://github.com/sharkdp/bat)
 brew "diff-so-fancy"     # Better 'diff' output (https://github.com/so-fancy/diff-so-fancy)
+brew "eza"               # Modern replacement for 'ls' (https://github.com/eza-community/eza)
 brew "fd"                # Simple, fast and user-friendly alternative to 'find' (https://github.com/sharkdp/fd/)
 brew "fzf"               # Fuzzy finder for the command line (https://github.com/junegunn/fzf)
 brew "git"               # Distributed version control
